@@ -1,10 +1,20 @@
 var express = require('express');
 var router = express.Router();
-var mongodb = require('./mongodb');
+//var mongodb = require('./mongodb');
+var config = require('./config');
 
+var MongoClient = require('mongodb').MongoClient;
+var url = config.db_path;
 router.get('/test', function (req, res, next) {
-    res.status(200).send("GOOD");
+    MongoClient.connect(url, function (err, db) {
+
+        var db_read = db.db("Test0702");
+        db_read.collection("0817").findOne({}, function (err, result) {
+            res.status(200).send(result.value.Name);
+        })
+    })
 })
+
 
 
 router.get('/login_RPN_list', function (req, res, next) {
@@ -199,4 +209,12 @@ router.post('/SEECG/:UID_Device/:date_start_ms/:date_end_ms', function (req, res
     };
 
 })
+
+router.post('/testmongo/:', function (req, res) {
+
+})
+
+
+
+
 module.exports = router;
