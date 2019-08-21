@@ -3,7 +3,7 @@ var express = require('express');
 //var bodyParser = require('body-parser');
 var config = require('./config');
 //var mongodb = require('./mongodb');
-var UserController = require('./UserController');
+var UserController = require('./usercontroller');
 
 var app = express();
 
