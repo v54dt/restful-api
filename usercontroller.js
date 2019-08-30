@@ -6,11 +6,33 @@ var config = require('./config');
 var MongoClient = require('mongodb').MongoClient;
 var url = config.db_path;
 router.get('/test', function (req, res, next) {
-    MongoClient.connect(url, function (err, db) {
+    MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
-        var db_read = db.db("Test0702");
-        db_read.collection("0817").findOne({}, function (err, result) {
-            res.status(200).send(result.value.Name);
+        var db_read = db.db("TestServer");
+        /*db_read.collection("Nurse").find({}, function (err, result) {
+            res.status(200).json(result);
+        })*/
+        db_read.collection("Nurse").find({}).toArray(function (err, result) {
+            if (err) throw err;
+            //var return_arr = [];
+            //return_arr.append(123);
+
+            //return_arr.push(` "UID_RPN": ${result[0].nurse_id},"Name": ${result[0].nurse_name}`);
+            var a = result;
+            delete a._id;
+            console.log(a);
+            
+
+            var current_time = Date.now();
+            var set_time = new Date(current_time);
+            /*var returnjson = {
+                "date": current_time,
+                "RPN": dsd
+            };*/
+            var rpn = [];
+            rpn[0] = {"UID_RPN" : a[0].nurse_id, "Name" : a[0].nurse_name};
+            var js = { "date": set_time, "RPN": rpn };
+            res.status(200).json(js);
         })
     })
 })
