@@ -16,9 +16,9 @@ var MongoClient = require('mongodb').MongoClient;
 var url = db_path;
 
 MongoClient.connect(url,function(err,db){
-    var db_read = db.db("Test0702");
-    db_read.collection("0716").findOne({},function(err,result){
+    var db_read = db.db("TestServer");
+    /*db_read.collection("0716").findOne({},function(err,result){
         
-    })
+    })*/
 
 })
