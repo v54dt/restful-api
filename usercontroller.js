@@ -20,8 +20,8 @@ router.get('/test', function (req, res, next) {
             //return_arr.push(` "UID_RPN": ${result[0].nurse_id},"Name": ${result[0].nurse_name}`);
             var a = result;
             delete a._id;
-            console.log(a);
-            
+            //console.log(a);
+
 
             var current_time = Date.now();
             var set_time = new Date(current_time);
@@ -30,7 +30,7 @@ router.get('/test', function (req, res, next) {
                 "RPN": dsd
             };*/
             var rpn = [];
-            rpn[0] = {"UID_RPN" : a[0].nurse_id, "Name" : a[0].nurse_name};
+            rpn[0] = { "UID_RPN": a[0].nurse_id, "Name": a[0].nurse_name };
             var js = { "date": set_time, "RPN": rpn };
             res.status(200).json(js);
         })
@@ -64,6 +64,34 @@ router.get('/login_RPN_list', function (req, res, next) {
     })
 })
 
+router.get('/test/login_RPN_list', function (req, res, next) {
+    MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
+
+        var db_read = db.db("TestServer");
+        db_read.collection("Nurse").find({}).toArray(function (err, result) {
+            //console.log(result.length);
+            //console.log(result);
+            //console.log("rerer :")
+            var current_time = new Date(Date.now()+8*60*60*1000);
+            console.log(Date.now());
+            console.log(current_time);
+            
+            var rpn = [];
+            for (var i = 0; i < result.length; i++) {
+                rpn.push({ "UID_RPN": result[i].nurse_id, "Name": result[i].nurse_name })
+            }
+
+            var response_json = {
+                "date": current_time,
+                "RPN": rpn
+            };
+            res.status(200).json(response_json);
+        })
+
+    })
+
+
+});
 router.post('/RPN_device_list/:id', function (req, res) {
     if (req.params.id) {
         res.json({
@@ -102,7 +130,6 @@ router.post('/RPN_device_list/:id', function (req, res) {
         });
     }
 });
-
 router.post('/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
     if (req.params.UID_RPN && req.params.BLE_NAME && req.params.MRN) {
         res.json({
@@ -119,7 +146,6 @@ router.post('/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
         })
     };
 })
-
 router.post('/RPN_device_unpair/:BLE_name', function (req, res) {
     if (req.params.BLE_name) {
         res.json({
@@ -128,7 +154,6 @@ router.post('/RPN_device_unpair/:BLE_name', function (req, res) {
         })
     }
 })
-
 router.post('/RTECG/:UID_Device', function (req, res) {
     if (req.params.UID_Device) {
         res.json({
@@ -179,7 +204,6 @@ router.post('/RTECG/:UID_Device', function (req, res) {
     }
 
 })
-
 router.post('/SEECG/:UID_Device/:date_start_ms/:date_end_ms', function (req, res) {
     if (req.params.UID_Device && req.params.date_start_ms && req.params.date_end_ms) {
         res.json({
@@ -232,9 +256,6 @@ router.post('/SEECG/:UID_Device/:date_start_ms/:date_end_ms', function (req, res
 
 })
 
-router.post('/testmongo/:', function (req, res) {
-
-})
 
 
 
