@@ -72,10 +72,10 @@ router.get('/test/login_RPN_list', function (req, res, next) {
             //console.log(result.length);
             //console.log(result);
             //console.log("rerer :")
-            var current_time = new Date(Date.now()+8*60*60*1000);
+            var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);   //UTC+8
             console.log(Date.now());
             console.log(current_time);
-            
+
             var rpn = [];
             for (var i = 0; i < result.length; i++) {
                 rpn.push({ "UID_RPN": result[i].nurse_id, "Name": result[i].nurse_name })
@@ -130,6 +130,20 @@ router.post('/RPN_device_list/:id', function (req, res) {
         });
     }
 });
+router.post('/test/RPN_device_list/:id', function (req, res) {
+    if (req.params.id) {
+        MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
+
+            var db_read = db.db("TestServer");
+            db_read.collection("Nurse").find({}).toArray(function (err, result) {
+
+            });
+
+
+        })
+    }
+});
+
 router.post('/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
     if (req.params.UID_RPN && req.params.BLE_NAME && req.params.MRN) {
         res.json({
