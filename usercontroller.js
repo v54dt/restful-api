@@ -69,9 +69,6 @@ router.get('/test/login_RPN_list', function (req, res, next) {
 
         var db_read = db.db("TestServer");
         db_read.collection("Nurse").find({}).toArray(function (err, result) {
-            //console.log(result.length);
-            //console.log(result);
-            //console.log("rerer :")
             var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);   //UTC+8
             console.log(Date.now());
             console.log(current_time);
@@ -130,16 +127,39 @@ router.post('/RPN_device_list/:id', function (req, res) {
         });
     }
 });
+
 router.post('/test/RPN_device_list/:id', function (req, res) {
     if (req.params.id) {
+
+        var nurse_id = Number(req.params.id);
+        //console.log(req.params.id);
+        var device_list = [];
+        var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);   //UTC+8
+
+
         MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
-
             var db_read = db.db("TestServer");
-            db_read.collection("Nurse").find({}).toArray(function (err, result) {
+            //console.log(nurse_id);
+            db_read.collection("administrate").find({ nurse_id: nurse_id }).toArray(function (err, result) {
+                var patient_id = result[0].patient_id;
+                //console.log(patient_id);
+                db_read.collection("Pair").find({ patient_id: patient_id }).toArray(function (err, result_Pair) {
+                    var sensor_id = result_Pair[0].sensor_id;
+                    //console.log(sensor_id);
+                    db_read.collection("Sensor").find({ device_id: sensor_id }).toArray(function (err, result_Sensor) {
 
+                        db_read.collection("Patient").find({ MRN: patient_id }).toArray(function (err, result_Patient) {
+
+                            device_list.push({ "UID_Device": result_Sensor[0].device_id, "BLE_NAME": result_Sensor[0].ble_name, "BATT": result_Sensor[0].BATT, "MRN": result_Pair[0].patient_id, "Name": result_Patient[0].Patient_Name })
+                            var response_json = {
+                                "date": current_time,
+                                "device_list": device_list
+                            };
+                            res.status(200).json(response_json);
+                        })
+                    })
+                })
             });
-
-
         })
     }
 });
@@ -160,6 +180,25 @@ router.post('/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
         })
     };
 })
+
+router.post('/test/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
+    if (req.params.UID_RPN && req.params.BLE_NAME && req.params.MRN) {
+
+        MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
+            db_write = db.db("TestServer");
+
+            var obj_administrate = { nurse_id: req.params.UID_RPN, patient_id: req.params.MRN };
+            db_write.collection("administrate").insertOne(obj_administrate);
+
+            var obj_Pair = { patient_id: req.params.MRN, sensor_id: req.params.BLE_NAME };
+            db_write.collection("Pair").insertOne(obj_Pair);
+
+        })
+        res.status(200).json({"pair_status":"OK"});
+    };
+})
+
+
 router.post('/RPN_device_unpair/:BLE_name', function (req, res) {
     if (req.params.BLE_name) {
         res.json({
