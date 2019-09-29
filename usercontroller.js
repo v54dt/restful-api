@@ -164,6 +164,8 @@ router.post('/test/RPN_device_list/:id', function (req, res) {
     }
 });
 
+
+
 router.post('/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
     if (req.params.UID_RPN && req.params.BLE_NAME && req.params.MRN) {
         res.json({
