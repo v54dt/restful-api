@@ -154,8 +154,6 @@ router.post('/test/RPN_device_list/:id', function (req, res) {
                 }
 
                 res.status(200).json(response_json);
-
-
             })
 
         })
@@ -183,18 +181,69 @@ router.post('/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
 
 router.post('/test/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
     if (req.params.UID_RPN && req.params.BLE_NAME && req.params.MRN) {
-
+        var response_json;
         MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
+
+            db_read = db.db("TestServer");
+            var UID_Device = req.params.BLE_NAME;
+            var BLE_NAME ; 
+            var BATT ;
+            var MRN = req.params.MRN;
+            var Name;
+            var Nurse_UID = req.params.UID_RPN;
+            var Nurse_Name;
+
+            db_read.collection("Sensor").find({device_id : Number(`${req.params.BLE_NAME}`)}).toArray(function(err,result1){
+                if(err) throw err;
+                BLE_NAME = result1[0].ble_name;
+                BATT = result1[0].BATT;
+
+                
+            })
+            console.log(BATT);
+            console.log(BLE_NAME);
+            db_read.collection("Patient").find({MRN:Number(`${req.params.MRN}`)}).toArray(function(err,result2){
+                if(err) throw err;
+                Name = result2[0].Patient_Name;
+            })
+            db_read.collection("Nurse").find({nurse_id : Number(`${req.params.UID_RPN}`)}).toArray(function(err,result3){
+                if(err) throw err;
+                Nurse_Name = result3[0].nurse_name;
+            })
+
+
+            var obj_sensor_relations =  {
+                "UID": UID_Device,
+                "BLE_NAME": BLE_NAME,
+                "BATT": BATT,
+                "Patient_MRN": MRN,
+                "Patient_Name": Name,
+                "Nurse_UID": Nurse_UID,
+                "Nurse_Name":Nurse_Name
+            }
             db_write = db.db("TestServer");
+            db_write.collection("sensor_relations").insertOne(obj_sensor_relations);
+            
 
-            var obj_administrate = { nurse_id: req.params.UID_RPN, patient_id: req.params.MRN };
-            db_write.collection("administrate").insertOne(obj_administrate);
-
-            var obj_Pair = { patient_id: req.params.MRN, sensor_id: req.params.BLE_NAME };
-            db_write.collection("Pair").insertOne(obj_Pair);
-
+            
+            var current_time = new Date(Date.now());
+            response_json = {
+                "date" : current_time,
+                "pair_status" : "OK",
+                "device_info":{
+                    "UID_Device" : UID_Device,
+                    "BLE_NAME" : BLE_NAME,
+                    "BATT" : BATT,
+                    "MRN" : MRN,
+                    "Name":Name
+                }
+            }
+            res.status(200).json(response_json);
+            console.log(response_json.device_info.BATT);
         })
-        res.status(200).json({ "pair_status": "OK" });
+        
+        
+
     };
 })
 
@@ -207,6 +256,24 @@ router.post('/RPN_device_unpair/:BLE_name', function (req, res) {
         })
     }
 })
+
+router.post('/test/RPN_device_unpair/:BLE_name',function(req,res){
+    MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
+        
+        db_read = db.db("TestServer");
+        db_read.collection("sensor_relations").deleteOne({UID : `${req.params.BLE_name}`},function(err,result){
+            if(err) throw err;
+        })
+        var current_time = new Date(Date.now());
+        var response_json = {
+            "date" : current_time,
+            "paor_status" : "OK"
+        }
+        res.status(200).json(response_json);
+
+    });
+})
+
 router.post('/RTECG/:UID_Device', function (req, res) {
     if (req.params.UID_Device) {
         res.json({
