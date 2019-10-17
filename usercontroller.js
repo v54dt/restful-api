@@ -62,9 +62,9 @@ router.get('/test/login_RPN_list', function (req, res, next) {
         })
 
     })
-
-
 });
+
+
 router.post('/test/RPN_device_list/:id', function (req, res) {
     if (req.params.id) {
         console.log("erwer");
@@ -96,8 +96,6 @@ router.post('/test/RPN_device_list/:id', function (req, res) {
         })
     }
 });
-
-
 
 
 router.post('/test/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
