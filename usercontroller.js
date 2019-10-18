@@ -160,9 +160,6 @@ router.post('/test/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res)
             res.status(200).json(response_json);
             console.log(response_json.device_info.BATT);
         })
-
-
-
     };
 })
 
@@ -273,28 +270,10 @@ router.post('/test/RTECG/:UID_Device', function (req, res) {
                 pointData_L12.push(data_time);
                 L12_datapoints.push(pointData_L1);
 
-
-
-                /*L1_datapoints.push(result[i].ECG_data[0].value);
-                L2_datapoints.push(result[i].ECG_data[1].value);
-                L3_datapoints.push(result[i].ECG_data[2].value);
-                L4_datapoints.push(result[i].ECG_data[3].value);
-                L5_datapoints.push(result[i].ECG_data[4].value);
-                L6_datapoints.push(result[i].ECG_data[5].value);
-                L7_datapoints.push(result[i].ECG_data[6].value);
-                L8_datapoints.push(result[i].ECG_data[7].value);
-                L9_datapoints.push(result[i].ECG_data[8].value);
-                L10_datapoints.push(result[i].ECG_data[9].value);
-                L11_datapoints.push(result[i].ECG_data[10].value);
-                L12_datapoints.push(result[i].ECG_data[11].value);*/
-
-
-                //L1_datapoints.push(pointData_L1);
-
             }
-
+            var newDate = new Date(current_time);
             response_json = {
-                "date": current_time,
+                "date": newDate,
                 "L1": L1_datapoints,
                 "L2": L2_datapoints,
                 "L3": L3_datapoints,
@@ -309,8 +288,6 @@ router.post('/test/RTECG/:UID_Device', function (req, res) {
                 "L12": L12_datapoints,
 
             }
-
-
             res.status(200).json(response_json);
 
         })
@@ -324,7 +301,6 @@ router.post('/test/SEECG/:UID_Device/:data_start_ms/:date_end_ms', function (req
         var current_time = Date.now();
         current_time = 1566202810413 + 500;
         //current_time = 3000;
-
 
         var start_time = Number(data_start_ms);
         var end_time = Number(dtat_end_ms);
@@ -410,25 +386,6 @@ router.post('/test/SEECG/:UID_Device/:data_start_ms/:date_end_ms', function (req
                 pointData_L12.push(result[i].ECG_data[11].value);
                 pointData_L12.push(data_time);
                 L12_datapoints.push(pointData_L1);
-
-
-
-                /*L1_datapoints.push(result[i].ECG_data[0].value);
-                L2_datapoints.push(result[i].ECG_data[1].value);
-                L3_datapoints.push(result[i].ECG_data[2].value);
-                L4_datapoints.push(result[i].ECG_data[3].value);
-                L5_datapoints.push(result[i].ECG_data[4].value);
-                L6_datapoints.push(result[i].ECG_data[5].value);
-                L7_datapoints.push(result[i].ECG_data[6].value);
-                L8_datapoints.push(result[i].ECG_data[7].value);
-                L9_datapoints.push(result[i].ECG_data[8].value);
-                L10_datapoints.push(result[i].ECG_data[9].value);
-                L11_datapoints.push(result[i].ECG_data[10].value);
-                L12_datapoints.push(result[i].ECG_data[11].value);*/
-
-
-                //L1_datapoints.push(pointData_L1);
-
             }
 
             response_json = {
@@ -446,15 +403,11 @@ router.post('/test/SEECG/:UID_Device/:data_start_ms/:date_end_ms', function (req
                 "L10": L10_datapoints,
                 "L11": L11_datapoints,
                 "L12": L12_datapoints,
-
             }
-
-
             res.status(200).json(response_json);
 
         })
     })
-
 })
 
 
