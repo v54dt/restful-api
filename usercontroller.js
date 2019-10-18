@@ -105,83 +105,165 @@ router.post('/test/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res)
 
             db_read = db.db("TestServer");
             var UID_Device = req.params.BLE_NAME;
-            var BLE_NAME ; 
-            var BATT ;
+            var BLE_NAME;
+            var BATT;
             var MRN = req.params.MRN;
             var Name;
             var Nurse_UID = req.params.UID_RPN;
             var Nurse_Name;
 
-            db_read.collection("Sensor").find({device_id : Number(`${req.params.BLE_NAME}`)}).toArray(function(err,result1){
-                if(err) throw err;
+            db_read.collection("Sensor").find({ device_id: Number(`${req.params.BLE_NAME}`) }).toArray(function (err, result1) {
+                if (err) throw err;
                 BLE_NAME = result1[0].ble_name;
                 BATT = result1[0].BATT;
 
-                
+
             })
             console.log(BATT);
             console.log(BLE_NAME);
-            db_read.collection("Patient").find({MRN:Number(`${req.params.MRN}`)}).toArray(function(err,result2){
-                if(err) throw err;
+            db_read.collection("Patient").find({ MRN: Number(`${req.params.MRN}`) }).toArray(function (err, result2) {
+                if (err) throw err;
                 Name = result2[0].Patient_Name;
             })
-            db_read.collection("Nurse").find({nurse_id : Number(`${req.params.UID_RPN}`)}).toArray(function(err,result3){
-                if(err) throw err;
+            db_read.collection("Nurse").find({ nurse_id: Number(`${req.params.UID_RPN}`) }).toArray(function (err, result3) {
+                if (err) throw err;
                 Nurse_Name = result3[0].nurse_name;
             })
 
 
-            var obj_sensor_relations =  {
+            var obj_sensor_relations = {
                 "UID": UID_Device,
                 "BLE_NAME": BLE_NAME,
                 "BATT": BATT,
                 "Patient_MRN": MRN,
                 "Patient_Name": Name,
                 "Nurse_UID": Nurse_UID,
-                "Nurse_Name":Nurse_Name
+                "Nurse_Name": Nurse_Name
             }
             db_write = db.db("TestServer");
             db_write.collection("sensor_relations").insertOne(obj_sensor_relations);
-            
 
-            
+
+
             var current_time = new Date(Date.now());
             response_json = {
-                "date" : current_time,
-                "pair_status" : "OK",
-                "device_info":{
-                    "UID_Device" : UID_Device,
-                    "BLE_NAME" : BLE_NAME,
-                    "BATT" : BATT,
-                    "MRN" : MRN,
-                    "Name":Name
+                "date": current_time,
+                "pair_status": "OK",
+                "device_info": {
+                    "UID_Device": UID_Device,
+                    "BLE_NAME": BLE_NAME,
+                    "BATT": BATT,
+                    "MRN": MRN,
+                    "Name": Name
                 }
             }
             res.status(200).json(response_json);
             console.log(response_json.device_info.BATT);
         })
-        
-        
+
+
 
     };
 })
 
 
-router.post('/test/RPN_device_unpair/:BLE_name',function(req,res){
+router.post('/test/RPN_device_unpair/:BLE_name', function (req, res) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
-        
+
         db_read = db.db("TestServer");
-        db_read.collection("sensor_relations").deleteOne({UID : `${req.params.BLE_name}`},function(err,result){
-            if(err) throw err;
+        db_read.collection("sensor_relations").deleteOne({ UID: `${req.params.BLE_name}` }, function (err, result) {
+            if (err) throw err;
         })
         var current_time = new Date(Date.now());
         var response_json = {
-            "date" : current_time,
-            "paor_status" : "OK"
+            "date": current_time,
+            "paor_status": "OK"
         }
         res.status(200).json(response_json);
 
     });
+})
+
+router.post('/test/RTECG/:UID_Device', function (req, res) {
+    MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
+
+        var current_time = Date.now();
+        current_time = 1566202810413+500;
+
+        
+        var L1_datapoints = [];
+        var L2_datapoints = [];
+        var L3_datapoints = [];
+        var L4_datapoints = [];
+        var L5_datapoints = [];
+        var L6_datapoints = [];
+        var L7_datapoints = [];
+        var L8_datapoints = [];
+        var L9_datapoints = [];
+        var L10_datapoints = [];
+        var L11_datapoints = [];
+        var L12_datapoints = [];
+
+        var response_json;
+        db_read = db.db("TestServer");
+        db_read.collection("ecg").find({ /*Timestamp: { $gt: `${current_time - 1000}`, $lt: `${current_time}` } */}).toArray(function (err, result) {
+
+            //console.log(result);
+            for (var i = 0; i < result.length; i++) {
+
+                var data_time = result[i].Timestamp;
+
+                var pointData_L1 = [];
+                pointData_L1.push(result[i].ECG_data[i].value);
+                pointData_L1.push(data_time);
+                var pointData_L2 = [];
+                var pointData_L3 = [];
+                var pointData_L4 = [];
+                var pointData_L5 = [];
+                var pointData_L6 = [];
+                var pointData_L7 = [];
+                var pointData_L8 = [];
+                var pointData_L9 = [];
+                var pointData_L10 = [];
+                var pointData_L11 = [];
+                var pointData_L12 = [];
+
+
+                /*L1_datapoints.push(result[i].ECG_data[0].value);
+                L2_datapoints.push(result[i].ECG_data[1].value);
+                L3_datapoints.push(result[i].ECG_data[2].value);
+                L4_datapoints.push(result[i].ECG_data[3].value);
+                L5_datapoints.push(result[i].ECG_data[4].value);
+                L6_datapoints.push(result[i].ECG_data[5].value);
+                L7_datapoints.push(result[i].ECG_data[6].value);
+                L8_datapoints.push(result[i].ECG_data[7].value);
+                L9_datapoints.push(result[i].ECG_data[8].value);
+                L10_datapoints.push(result[i].ECG_data[9].value);
+                L11_datapoints.push(result[i].ECG_data[10].value);
+                L12_datapoints.push(result[i].ECG_data[11].value);*/
+
+
+                L1_datapoints.push(pointData_L1);
+
+            }
+
+            response_json={
+                "date" : current_time,
+                "L1" : L1_datapoints,
+                "L2" : L2_datapoints,
+            }
+            
+
+            res.status(200).json(response_json);
+            
+        })
+
+        
+
+    })
+
+
+
 })
 
 
