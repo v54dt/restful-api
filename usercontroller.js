@@ -188,9 +188,9 @@ router.post('/test/RTECG/:UID_Device', function (req, res) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
         var current_time = Date.now();
-        current_time = 1566202810413+500;
+        current_time = 1566202810413 + 500;
+        //current_time = 3000;
 
-        
         var L1_datapoints = [];
         var L2_datapoints = [];
         var L3_datapoints = [];
@@ -206,7 +206,7 @@ router.post('/test/RTECG/:UID_Device', function (req, res) {
 
         var response_json;
         db_read = db.db("TestServer");
-        db_read.collection("ecg").find({ /*Timestamp: { $gt: `${current_time - 1000}`, $lt: `${current_time}` } */}).toArray(function (err, result) {
+        db_read.collection("ecg").find({ Timestamp: { $gt: Number(`${current_time - 1000}`), $lt: Number(`${current_time}`) } }).toArray(function (err, result) {
 
             //console.log(result);
             for (var i = 0; i < result.length; i++) {
@@ -214,19 +214,65 @@ router.post('/test/RTECG/:UID_Device', function (req, res) {
                 var data_time = result[i].Timestamp;
 
                 var pointData_L1 = [];
-                pointData_L1.push(result[i].ECG_data[i].value);
+                pointData_L1.push(result[i].ECG_data[0].value);
                 pointData_L1.push(data_time);
+                L1_datapoints.push(pointData_L1);
+
                 var pointData_L2 = [];
+                pointData_L2.push(result[i].ECG_data[1].value);
+                pointData_L2.push(data_time);
+                L2_datapoints.push(pointData_L2);
+
                 var pointData_L3 = [];
+                pointData_L3.push(result[i].ECG_data[2].value);
+                pointData_L3.push(data_time);
+                L3_datapoints.push(pointData_L3);
+
                 var pointData_L4 = [];
+                pointData_L4.push(result[i].ECG_data[3].value);
+                pointData_L4.push(data_time);
+                L4_datapoints.push(pointData_L4);
+
                 var pointData_L5 = [];
+                pointData_L5.push(result[i].ECG_data[4].value);
+                pointData_L5.push(data_time);
+                L5_datapoints.push(pointData_L5);
+
                 var pointData_L6 = [];
+                pointData_L6.push(result[i].ECG_data[5].value);
+                pointData_L6.push(data_time);
+                L6_datapoints.push(pointData_L6);
+
                 var pointData_L7 = [];
+                pointData_L7.push(result[i].ECG_data[6].value);
+                pointData_L7.push(data_time);
+                L7_datapoints.push(pointData_L7);
+
                 var pointData_L8 = [];
+                pointData_L8.push(result[i].ECG_data[7].value);
+                pointData_L8.push(data_time);
+                L8_datapoints.push(pointData_L8);
+
                 var pointData_L9 = [];
+                pointData_L9.push(result[i].ECG_data[8].value);
+                pointData_L9.push(data_time);
+                L9_datapoints.push(pointData_L9);
+
                 var pointData_L10 = [];
+                pointData_L10.push(result[i].ECG_data[9].value);
+                pointData_L10.push(data_time);
+                L10_datapoints.push(pointData_L10);
+
                 var pointData_L11 = [];
+                pointData_L11.push(result[i].ECG_data[10].value);
+                pointData_L11.push(data_time);
+                L11_datapoints.push(pointData_L1);
+
                 var pointData_L12 = [];
+                pointData_L12.push(result[i].ECG_data[11].value);
+                pointData_L12.push(data_time);
+                L12_datapoints.push(pointData_L1);
+
 
 
                 /*L1_datapoints.push(result[i].ECG_data[0].value);
@@ -243,26 +289,171 @@ router.post('/test/RTECG/:UID_Device', function (req, res) {
                 L12_datapoints.push(result[i].ECG_data[11].value);*/
 
 
-                L1_datapoints.push(pointData_L1);
+                //L1_datapoints.push(pointData_L1);
 
             }
 
-            response_json={
-                "date" : current_time,
-                "L1" : L1_datapoints,
-                "L2" : L2_datapoints,
+            response_json = {
+                "date": current_time,
+                "L1": L1_datapoints,
+                "L2": L2_datapoints,
+                "L3": L3_datapoints,
+                "L4": L4_datapoints,
+                "L5": L5_datapoints,
+                "L6": L6_datapoints,
+                "L7": L7_datapoints,
+                "L8": L8_datapoints,
+                "L9": L9_datapoints,
+                "L10": L10_datapoints,
+                "L11": L11_datapoints,
+                "L12": L12_datapoints,
+
             }
-            
+
 
             res.status(200).json(response_json);
-            
+
         })
-
-        
-
     })
 
+})
 
+router.post('/test/SEECG/:UID_Device/:data_start_ms/:date_end_ms', function (req, res) {
+    MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
+
+        var current_time = Date.now();
+        current_time = 1566202810413 + 500;
+        //current_time = 3000;
+
+
+        var start_time = Number(data_start_ms);
+        var end_time = Number(dtat_end_ms);
+
+        var L1_datapoints = [];
+        var L2_datapoints = [];
+        var L3_datapoints = [];
+        var L4_datapoints = [];
+        var L5_datapoints = [];
+        var L6_datapoints = [];
+        var L7_datapoints = [];
+        var L8_datapoints = [];
+        var L9_datapoints = [];
+        var L10_datapoints = [];
+        var L11_datapoints = [];
+        var L12_datapoints = [];
+
+        var response_json;
+        db_read = db.db("TestServer");
+        db_read.collection("ecg").find({ Timestamp: { $gt: `${start_time}`, $lt: `${end_time}` } }).toArray(function (err, result) {
+
+            //console.log(result);
+            for (var i = 0; i < result.length; i++) {
+
+                var data_time = result[i].Timestamp;
+
+                var pointData_L1 = [];
+                pointData_L1.push(result[i].ECG_data[0].value);
+                pointData_L1.push(data_time);
+                L1_datapoints.push(pointData_L1);
+
+                var pointData_L2 = [];
+                pointData_L2.push(result[i].ECG_data[1].value);
+                pointData_L2.push(data_time);
+                L2_datapoints.push(pointData_L2);
+
+                var pointData_L3 = [];
+                pointData_L3.push(result[i].ECG_data[2].value);
+                pointData_L3.push(data_time);
+                L3_datapoints.push(pointData_L3);
+
+                var pointData_L4 = [];
+                pointData_L4.push(result[i].ECG_data[3].value);
+                pointData_L4.push(data_time);
+                L4_datapoints.push(pointData_L4);
+
+                var pointData_L5 = [];
+                pointData_L5.push(result[i].ECG_data[4].value);
+                pointData_L5.push(data_time);
+                L5_datapoints.push(pointData_L5);
+
+                var pointData_L6 = [];
+                pointData_L6.push(result[i].ECG_data[5].value);
+                pointData_L6.push(data_time);
+                L6_datapoints.push(pointData_L6);
+
+                var pointData_L7 = [];
+                pointData_L7.push(result[i].ECG_data[6].value);
+                pointData_L7.push(data_time);
+                L7_datapoints.push(pointData_L7);
+
+                var pointData_L8 = [];
+                pointData_L8.push(result[i].ECG_data[7].value);
+                pointData_L8.push(data_time);
+                L8_datapoints.push(pointData_L8);
+
+                var pointData_L9 = [];
+                pointData_L9.push(result[i].ECG_data[8].value);
+                pointData_L9.push(data_time);
+                L9_datapoints.push(pointData_L9);
+
+                var pointData_L10 = [];
+                pointData_L10.push(result[i].ECG_data[9].value);
+                pointData_L10.push(data_time);
+                L10_datapoints.push(pointData_L10);
+
+                var pointData_L11 = [];
+                pointData_L11.push(result[i].ECG_data[10].value);
+                pointData_L11.push(data_time);
+                L11_datapoints.push(pointData_L1);
+
+                var pointData_L12 = [];
+                pointData_L12.push(result[i].ECG_data[11].value);
+                pointData_L12.push(data_time);
+                L12_datapoints.push(pointData_L1);
+
+
+
+                /*L1_datapoints.push(result[i].ECG_data[0].value);
+                L2_datapoints.push(result[i].ECG_data[1].value);
+                L3_datapoints.push(result[i].ECG_data[2].value);
+                L4_datapoints.push(result[i].ECG_data[3].value);
+                L5_datapoints.push(result[i].ECG_data[4].value);
+                L6_datapoints.push(result[i].ECG_data[5].value);
+                L7_datapoints.push(result[i].ECG_data[6].value);
+                L8_datapoints.push(result[i].ECG_data[7].value);
+                L9_datapoints.push(result[i].ECG_data[8].value);
+                L10_datapoints.push(result[i].ECG_data[9].value);
+                L11_datapoints.push(result[i].ECG_data[10].value);
+                L12_datapoints.push(result[i].ECG_data[11].value);*/
+
+
+                //L1_datapoints.push(pointData_L1);
+
+            }
+
+            response_json = {
+                "date": current_time,
+                "data_point_amount" : result.length,
+                "L1": L1_datapoints,
+                "L2": L2_datapoints,
+                "L3": L3_datapoints,
+                "L4": L4_datapoints,
+                "L5": L5_datapoints,
+                "L6": L6_datapoints,
+                "L7": L7_datapoints,
+                "L8": L8_datapoints,
+                "L9": L9_datapoints,
+                "L10": L10_datapoints,
+                "L11": L11_datapoints,
+                "L12": L12_datapoints,
+
+            }
+
+
+            res.status(200).json(response_json);
+
+        })
+    })
 
 })
 
