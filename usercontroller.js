@@ -1,10 +1,12 @@
 var express = require('express');
+var async = require('async');
 var router = express.Router();
 //var mongodb = require('./mongodb');
 var config = require('./config');
 
 var MongoClient = require('mongodb').MongoClient;
 var url = config.db_path;
+
 router.get('/test', function (req, res, next) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
@@ -72,8 +74,10 @@ router.post('/test/RPN_device_list/:id', function (req, res) {
             db_read = db.db("TestServer");
             var current_time = new Date(Date.now());
             var device_list = [];
+
+
             db_read.collection("sensor_relations").find({ Nurse_UID: Number(`${req.params.id}`) }).toArray(function (err, result) {
-                console.log(result.length);
+                //console.log(result);
                 for (var i = 0; i < result.length; i++) {
                     device_list.push({
                         "UID_Device": result[i].UID,
@@ -83,7 +87,7 @@ router.post('/test/RPN_device_list/:id', function (req, res) {
                         "Name": result[i].Patient_Name
                     })
                 }
-                console.log(device_list);
+                //console.log(device_list);
 
                 var response_json = {
                     "date": current_time,
@@ -99,8 +103,10 @@ router.post('/test/RPN_device_list/:id', function (req, res) {
 
 
 router.post('/test/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
+    /*
     if (req.params.UID_RPN && req.params.BLE_NAME && req.params.MRN) {
         var response_json;
+        console.log("device_pair");
         MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
             db_read = db.db("TestServer");
@@ -127,40 +133,117 @@ router.post('/test/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res)
             })
             db_read.collection("Nurse").find({ nurse_id: Number(`${req.params.UID_RPN}`) }).toArray(function (err, result3) {
                 if (err) throw err;
+
                 Nurse_Name = result3[0].nurse_name;
             })
+            
+            db_read.collection("Nurse").find({ nurse_id: Number(`${req.params.UID_RPN}`) }).toArray(function (err1, result1) {
+                if (err) throw err;
+                //console.log(reesult1[0]);
+                db_read.collection("Patient").find({ MRN: Number(`${req.params.MRN}`) }).toArray(function (err2, result2) {
+                    if (err) throw err;
+                    db_read.collection("Sensor").find({ device_id: Number(`${req.params.BLE_Name}`) }).toArray(function (err3, result3) {
+                        if (err) throw err;
+                        console.log(result3)
+                        BLE_NAME = result3[0].ble_name;
+                        BATT = result3[0].BATT;
+                        Name = result2[0].Patient_Name;
+                        Nurse_Name = result1[0].nurse_name;
+
+                    })
+                })
+            })
+
+        var obj_sensor_relations = {
+            "UID": UID_Device,
+            "BLE_NAME": BLE_NAME,
+            "BATT": BATT,
+            "Patient_MRN": MRN,
+            "Patient_Name": Name,
+            "Nurse_UID": Nurse_UID,
+            "Nurse_Name": Nurse_Name
+        }
 
 
-            var obj_sensor_relations = {
-                "UID": UID_Device,
+        db_write = db.db("TestServer");
+        db_write.collection("sensor_relations").insertOne(obj_sensor_relations);
+
+        var current_time = new Date(Date.now());
+        response_json = {
+            "date": current_time,
+            "pair_status": "OK",
+            "device_info": {
+                "UID_Device": UID_Device,
                 "BLE_NAME": BLE_NAME,
                 "BATT": BATT,
-                "Patient_MRN": MRN,
-                "Patient_Name": Name,
-                "Nurse_UID": Nurse_UID,
-                "Nurse_Name": Nurse_Name
+                "MRN": MRN,
+                "Name": Name
             }
-            db_write = db.db("TestServer");
-            db_write.collection("sensor_relations").insertOne(obj_sensor_relations);
+        }
+        res.status(200).json(response_json);
+        console.log(response_json);
+        console.log(response_json.device_info.BATT);
+    })
+    };*/
+
+    if (req.params.UID_RPN && req.params.BLE_NAME && req.params.MRN) {
+        MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
+
+            db_read = db.db("TestServer");
+
+            async.parallel([
+                function (finish) {
+                    //func1(function(err1,rst1){
+                    // todo
+                    db_read.collection("Sensor").find({ device_id: Number(`${req.params.BLE_NAME}`) }).toArray(function (err1, res1) {
+                        finish(err1, res1);
+                    })
+                    //db_read.collection("Sensor").find({ device_id: Number(`${req.params.BLE_NAME}`) }).toArray(function (err, result1)
 
 
+                    //})
+                },
+                function (finish) {
+                    //func2(function (err2, res2) {
+                    //todo
+                    db_read.collection("Patient").find({ MRN: Number(`${req.params.MRN}`) }).toArray(function (err2, res2) {
+                        finish(err2, res2);
 
-            var current_time = new Date(Date.now());
-            response_json = {
-                "date": current_time,
-                "pair_status": "OK",
-                "device_info": {
-                    "UID_Device": UID_Device,
-                    "BLE_NAME": BLE_NAME,
-                    "BATT": BATT,
-                    "MRN": MRN,
-                    "Name": Name
+                    })
+                },
+                function (finish) {
+                    //func3(function (err3, res3) {
+                    //todo
+                    db_read.collection("Nurse").find({ nurse_id: Number(`${req.params.UID_RPN}`) }).toArray(function (err3, res3) {
+                        finish(err3, res3);
+                    })
                 }
-            }
-            res.status(200).json(response_json);
-            console.log(response_json.device_info.BATT);
+            ], function (errs, results) {
+                if (errs) throw errs;
+                console.log(results[0][0].device_id);
+
+                var current_time = new Date(Date.now());
+                var response_json = {
+                    "date": current_time,
+                    "pair_status": "OK",
+                    "device_info": {
+                        "UID_Device": results[0][0].device_id,
+                        "BLE_NAME": results[0][0].ble_name,
+                        "BATT": results[0][0].BATT,
+                        "MRN": results[1][0].MRN,
+                        "Name": results[1][0].Patient_Name
+                    }
+                }
+
+                console.log(response_json);
+
+
+                res.status(200).json(response_json);
+            })
         })
-    };
+    }
+
+
 })
 
 
@@ -302,8 +385,8 @@ router.post('/test/SEECG/:UID_Device/:data_start_ms/:date_end_ms', function (req
         current_time = 1566202810413 + 500;
         //current_time = 3000;
 
-        var start_time = Number(data_start_ms);
-        var end_time = Number(dtat_end_ms);
+        var start_time = Number(req.params.data_start_ms);
+        var end_time = Number(req.params.date_end_ms);
 
         var L1_datapoints = [];
         var L2_datapoints = [];
@@ -320,8 +403,8 @@ router.post('/test/SEECG/:UID_Device/:data_start_ms/:date_end_ms', function (req
 
         var response_json;
         db_read = db.db("TestServer");
-        db_read.collection("ecg").find({ Timestamp: { $gt: `${start_time}`, $lt: `${end_time}` } }).toArray(function (err, result) {
-
+        db_read.collection("ecg").find({ /*Timestamp: { $gt: `${start_time}`, $lt: `${end_time}` },*/UID: Number(`${req.params.UID_Device}`) }).toArray(function (err, result) {
+            console.log(result);
             //console.log(result);
             for (var i = 0; i < result.length; i++) {
 
@@ -390,7 +473,7 @@ router.post('/test/SEECG/:UID_Device/:data_start_ms/:date_end_ms', function (req
 
             response_json = {
                 "date": current_time,
-                "data_point_amount" : result.length,
+                "data_point_amount": result.length,
                 "L1": L1_datapoints,
                 "L2": L2_datapoints,
                 "L3": L3_datapoints,
