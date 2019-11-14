@@ -15,14 +15,21 @@ MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
     var UID = 10015;
     var Name = "王小明"
 
+ 
+    //1553240835494
+    //1553240985105.09
+    //149611 ms
+    
     async.forever(function (callback) {
 
         if (err) throw err;
         var start = Number(Date.now());
+        console.log("Start time");
         console.log(start);
         fs.createReadStream('ecg_data_0.csv')
             .pipe(csv())
             .on('data', (row) => {
+                //console.log("data");
                 if (row.device_id == 3) {
                     var current_time = Number(Date.now());
                     var start_time = 1553240835494;
@@ -51,19 +58,21 @@ MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
                         Timestamp: t
                     };
 
-
                     db_write.collection("ecg_test_1101").insertOne(mongo_obj);
+
                 }
             })
             .on('end', () => {
                 console.log('CSV file successfully processed');
+                var end = Date.now();
+                console.log(end);
                 setTimeout(function () {
                     callback();
-                }, 0)
+                }, 149611) // id = 3 , data length = 149611 ms
             });
-
-    })
-
+    },function(err){
+        console.log(err);
+    });
 
 });
 
