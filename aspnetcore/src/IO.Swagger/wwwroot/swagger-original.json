@@ -1,0 +1,682 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "ECG Restful API",
+    "description" : "TEXT\n",
+    "contact" : {
+      "email" : "vincent71497867@gmail.com"
+    },
+    "version" : "1.0.0-oas3"
+  },
+  "externalDocs" : {
+    "description" : "Find out more about Swagger",
+    "url" : "http://swagger.io"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/v54dt/ecg_restful/1.0.0"
+  }, {
+    "url" : "http://virtserver.swaggerhub.com/v54dt/ecg_restful/1.0.0"
+  } ],
+  "tags" : [ {
+    "name" : "ECG"
+  } ],
+  "paths" : {
+    "/test/login_RPN_list" : {
+      "get" : {
+        "tags" : [ "ECG" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RPN_list"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/test/RPN_device_list/{id}" : {
+      "post" : {
+        "tags" : [ "ECG" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "ID of pet to return",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RPN_device_list"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/test/RPN_device_pair/{UID_RPN}/{BLE_NAME}/{MRN}" : {
+      "post" : {
+        "tags" : [ "ECG" ],
+        "parameters" : [ {
+          "name" : "UID_RPN",
+          "in" : "path",
+          "description" : "t",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "BLE_NAME",
+          "in" : "path",
+          "description" : "t",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "MRN",
+          "in" : "path",
+          "description" : "t",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "t",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RPN_device_pair"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/test/RPN_device_unpair/{BLE_NAME}" : {
+      "post" : {
+        "tags" : [ "ECG" ],
+        "parameters" : [ {
+          "name" : "BLE_NAME",
+          "in" : "path",
+          "description" : "t",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RPN_device_unpair"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/test/RTECG/{UID_Device}" : {
+      "post" : {
+        "tags" : [ "ECG" ],
+        "parameters" : [ {
+          "name" : "UID_Device",
+          "in" : "path",
+          "description" : "t",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ecg_data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/test/SEECG/{UID_Device}/{data_start_ms}/{date_end_ms}" : {
+      "post" : {
+        "tags" : [ "ECG" ],
+        "parameters" : [ {
+          "name" : "UID_Device",
+          "in" : "path",
+          "description" : "t",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "data_start_ms",
+          "in" : "path",
+          "description" : "t",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "date_end_ms",
+          "in" : "path",
+          "description" : "t",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ecg_data"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "RPN_list" : {
+        "required" : [ "RPN", "date" ],
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "RPN" : {
+            "type" : "array",
+            "xml" : {
+              "name" : "photoUrl",
+              "wrapped" : true
+            },
+            "items" : {
+              "$ref" : "#/components/schemas/RPN_list_RPN"
+            }
+          }
+        },
+        "example" : {
+          "date" : "2000-01-23T04:56:07.000+00:00",
+          "RPN" : [ {
+            "UID_RPN" : 10015,
+            "Name" : "陳小姐"
+          }, {
+            "UID_RPN" : 10015,
+            "Name" : "陳小姐"
+          } ]
+        }
+      },
+      "RPN_device_list" : {
+        "required" : [ "date", "device_list" ],
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "device_list" : {
+            "$ref" : "#/components/schemas/RPN_device_list_device_list"
+          }
+        },
+        "example" : {
+          "date" : "2000-01-23T04:56:07.000+00:00",
+          "device_list" : {
+            "BATT" : 93,
+            "UID_Device" : 20,
+            "MRN" : 10015,
+            "BLE_Name" : "ECG-test2",
+            "Name" : "柯博文"
+          }
+        }
+      },
+      "RPN_device_pair" : {
+        "required" : [ "date", "device_info", "pair_status" ],
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "pair_status" : {
+            "type" : "string",
+            "example" : "OK"
+          },
+          "device_info" : {
+            "$ref" : "#/components/schemas/RPN_device_pair_device_info"
+          }
+        },
+        "example" : {
+          "date" : "2000-01-23T04:56:07.000+00:00",
+          "pair_status" : "OK",
+          "device_info" : {
+            "BATT" : 83,
+            "UID_Device" : 10015,
+            "BLE_NAME" : "20",
+            "Name" : "柯博文"
+          }
+        }
+      },
+      "RPN_device_unpair" : {
+        "required" : [ "date", "pair_status" ],
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "pair_status" : {
+            "type" : "string",
+            "example" : "Unpaired"
+          }
+        },
+        "example" : {
+          "date" : "2000-01-23T04:56:07.000+00:00",
+          "pair_status" : "Unpaired"
+        }
+      },
+      "ecg_data" : {
+        "required" : [ "L1", "L10", "L11", "L12", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "data_point_amount", "date" ],
+        "type" : "object",
+        "properties" : {
+          "date" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "data_point_amount" : {
+            "type" : "integer",
+            "example" : 4,
+            "default" : 1000
+          },
+          "L1" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/data_point"
+              }, {
+                "$ref" : "#/components/schemas/data_point2"
+              }, {
+                "$ref" : "#/components/schemas/data_point3"
+              }, {
+                "$ref" : "#/components/schemas/data_point4"
+              } ]
+            }
+          },
+          "L2" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/data_point"
+              }, {
+                "$ref" : "#/components/schemas/data_point2"
+              }, {
+                "$ref" : "#/components/schemas/data_point3"
+              }, {
+                "$ref" : "#/components/schemas/data_point4"
+              } ]
+            }
+          },
+          "L3" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/data_point"
+              }, {
+                "$ref" : "#/components/schemas/data_point2"
+              }, {
+                "$ref" : "#/components/schemas/data_point3"
+              }, {
+                "$ref" : "#/components/schemas/data_point4"
+              } ]
+            }
+          },
+          "L4" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/data_point"
+              }, {
+                "$ref" : "#/components/schemas/data_point2"
+              }, {
+                "$ref" : "#/components/schemas/data_point3"
+              }, {
+                "$ref" : "#/components/schemas/data_point4"
+              } ]
+            }
+          },
+          "L5" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/data_point"
+              }, {
+                "$ref" : "#/components/schemas/data_point2"
+              }, {
+                "$ref" : "#/components/schemas/data_point3"
+              }, {
+                "$ref" : "#/components/schemas/data_point4"
+              } ]
+            }
+          },
+          "L6" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/data_point"
+              }, {
+                "$ref" : "#/components/schemas/data_point2"
+              }, {
+                "$ref" : "#/components/schemas/data_point3"
+              }, {
+                "$ref" : "#/components/schemas/data_point4"
+              } ]
+            }
+          },
+          "L7" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/data_point"
+              }, {
+                "$ref" : "#/components/schemas/data_point2"
+              }, {
+                "$ref" : "#/components/schemas/data_point3"
+              }, {
+                "$ref" : "#/components/schemas/data_point4"
+              } ]
+            }
+          },
+          "L8" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/data_point"
+              }, {
+                "$ref" : "#/components/schemas/data_point2"
+              }, {
+                "$ref" : "#/components/schemas/data_point3"
+              }, {
+                "$ref" : "#/components/schemas/data_point4"
+              } ]
+            }
+          },
+          "L9" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/data_point"
+              }, {
+                "$ref" : "#/components/schemas/data_point2"
+              }, {
+                "$ref" : "#/components/schemas/data_point3"
+              }, {
+                "$ref" : "#/components/schemas/data_point4"
+              } ]
+            }
+          },
+          "L10" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/data_point"
+              }, {
+                "$ref" : "#/components/schemas/data_point2"
+              }, {
+                "$ref" : "#/components/schemas/data_point3"
+              }, {
+                "$ref" : "#/components/schemas/data_point4"
+              } ]
+            }
+          },
+          "L11" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/data_point"
+              }, {
+                "$ref" : "#/components/schemas/data_point2"
+              }, {
+                "$ref" : "#/components/schemas/data_point3"
+              }, {
+                "$ref" : "#/components/schemas/data_point4"
+              } ]
+            }
+          },
+          "L12" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/components/schemas/data_point"
+              }, {
+                "$ref" : "#/components/schemas/data_point2"
+              }, {
+                "$ref" : "#/components/schemas/data_point3"
+              }, {
+                "$ref" : "#/components/schemas/data_point4"
+              } ]
+            }
+          }
+        },
+        "example" : {
+          "date" : "2000-01-23T04:56:07.000+00:00",
+          "L1" : [ "", "" ],
+          "L2" : [ "", "" ],
+          "L3" : [ "", "" ],
+          "L4" : [ "", "" ],
+          "L5" : [ "", "" ],
+          "L6" : [ "", "" ],
+          "L10" : [ "", "" ],
+          "L7" : [ "", "" ],
+          "data_point_amount" : 4,
+          "L8" : [ "", "" ],
+          "L12" : [ "", "" ],
+          "L9" : [ "", "" ],
+          "L11" : [ "", "" ]
+        }
+      },
+      "data_point" : {
+        "type" : "array",
+        "description" : "[value,timestamp]",
+        "items" : {
+          "oneOf" : [ {
+            "type" : "number",
+            "format" : "double",
+            "example" : 0.1546
+          }, {
+            "type" : "integer",
+            "example" : 1566202810413
+          } ],
+          "x-model-name" : "OneOfdataPointItems"
+        }
+      },
+      "data_point2" : {
+        "type" : "array",
+        "description" : "[value,timestamp]",
+        "items" : {
+          "oneOf" : [ {
+            "type" : "number",
+            "format" : "double",
+            "example" : 0.1624
+          }, {
+            "type" : "integer",
+            "example" : 1566202810417
+          } ],
+          "x-model-name" : "OneOfdataPoint2Items"
+        }
+      },
+      "data_point3" : {
+        "type" : "array",
+        "description" : "[value,timestamp]",
+        "items" : {
+          "oneOf" : [ {
+            "type" : "number",
+            "format" : "double",
+            "example" : 0.1879
+          }, {
+            "type" : "integer",
+            "example" : 1566202810421
+          } ],
+          "x-model-name" : "OneOfdataPoint3Items"
+        }
+      },
+      "data_point4" : {
+        "type" : "array",
+        "description" : "[value,timestamp]",
+        "items" : {
+          "oneOf" : [ {
+            "type" : "number",
+            "format" : "double",
+            "example" : 0.2011
+          }, {
+            "type" : "integer",
+            "example" : 1566202810425
+          } ],
+          "x-model-name" : "OneOfdataPoint4Items"
+        }
+      },
+      "RPN_list_RPN" : {
+        "required" : [ "Name", "UID_RPN" ],
+        "type" : "object",
+        "properties" : {
+          "UID_RPN" : {
+            "type" : "integer",
+            "example" : 10015
+          },
+          "Name" : {
+            "type" : "string",
+            "example" : "陳小姐"
+          }
+        },
+        "example" : {
+          "UID_RPN" : 10015,
+          "Name" : "陳小姐"
+        }
+      },
+      "RPN_device_list_device_list" : {
+        "required" : [ "BATT", "BLE_NAME", "MRN", "Name", "UID_Device" ],
+        "type" : "object",
+        "properties" : {
+          "UID_Device" : {
+            "type" : "integer",
+            "example" : 20
+          },
+          "BLE_Name" : {
+            "type" : "string",
+            "example" : "ECG-test2"
+          },
+          "BATT" : {
+            "type" : "integer",
+            "example" : 93
+          },
+          "MRN" : {
+            "type" : "integer",
+            "example" : 10015
+          },
+          "Name" : {
+            "type" : "string",
+            "example" : "柯博文"
+          }
+        },
+        "example" : {
+          "BATT" : 93,
+          "UID_Device" : 20,
+          "MRN" : 10015,
+          "BLE_Name" : "ECG-test2",
+          "Name" : "柯博文"
+        }
+      },
+      "RPN_device_pair_device_info" : {
+        "required" : [ "BATT", "BLE_NAME", "MRN", "Name", "UID_Device" ],
+        "type" : "object",
+        "properties" : {
+          "UID_Device" : {
+            "type" : "integer",
+            "example" : 10015
+          },
+          "BLE_NAME" : {
+            "type" : "string",
+            "example" : "20"
+          },
+          "BATT" : {
+            "type" : "integer",
+            "example" : 83
+          },
+          "Name" : {
+            "type" : "string",
+            "example" : "柯博文"
+          }
+        },
+        "example" : {
+          "BATT" : 83,
+          "UID_Device" : 10015,
+          "BLE_NAME" : "20",
+          "Name" : "柯博文"
+        }
+      }
+    },
+    "securitySchemes" : {
+      "petstore_auth" : {
+        "type" : "oauth2",
+        "flows" : {
+          "implicit" : {
+            "authorizationUrl" : "http://petstore.swagger.io/oauth/dialog",
+            "scopes" : {
+              "write:pets" : "modify pets in your account",
+              "read:pets" : "read your pets"
+            }
+          }
+        }
+      },
+      "api_key" : {
+        "type" : "apiKey",
+        "name" : "api_key",
+        "in" : "header"
+      }
+    }
+  }
+}
