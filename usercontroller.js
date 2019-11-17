@@ -32,14 +32,14 @@ router.get('/test', function (req, res, next) {
 
 
 
-router.get('/test/login_RPN_list', function (req, res, next) {
+router.get('/login_RPN_list', function (req, res, next) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
         var db_read = db.db("TestServer");
         db_read.collection("Nurse").find({}).toArray(function (err, result) {
             var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);   //UTC+8
-            console.log(Date.now());
-            console.log(current_time);
+            //console.log(Date.now());
+            //console.log(current_time);
 
             var rpn = [];
             for (var i = 0; i < result.length; i++) {
@@ -57,7 +57,7 @@ router.get('/test/login_RPN_list', function (req, res, next) {
 });
 
 
-router.post('/test/RPN_device_list/:id', function (req, res) {
+router.post('/RPN_device_list/:id', function (req, res) {
     if (req.params.id) {
         MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
             db_read = db.db("TestServer");
@@ -88,7 +88,7 @@ router.post('/test/RPN_device_list/:id', function (req, res) {
 });
 
 
-router.post('/test/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
+router.post('/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
     if (req.params.UID_RPN && req.params.BLE_NAME && req.params.MRN) {
         MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
@@ -146,7 +146,7 @@ router.post('/test/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res)
 })
 
 
-router.post('/test/RPN_device_unpair/:BLE_name', function (req, res) {
+router.post('/RPN_device_unpair/:BLE_name', function (req, res) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
         db_read = db.db("TestServer");
@@ -163,11 +163,11 @@ router.post('/test/RPN_device_unpair/:BLE_name', function (req, res) {
     });
 })
 
-router.post('/test/RTECG/:UID_Device', function (req, res) {
+router.post('/RTECG/:UID_Device', function (req, res) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
         var current_time = Date.now();
-        current_time = 1566202810413 + 500;
+        //current_time = 1572577086527 + 1000;
 
         var L1_datapoints = [];
         var L2_datapoints = [];
@@ -184,8 +184,9 @@ router.post('/test/RTECG/:UID_Device', function (req, res) {
 
         var response_json;
         db_read = db.db("TestServer");
-        db_read.collection("ecg").find({ Timestamp: { $gt: Number(`${current_time - 1000}`), $lt: Number(`${current_time}`) } }).toArray(function (err, result) {
-
+        db_read.collection("ecg").find({ Timestamp: { $gt: Number(`${current_time - 1000}`), $lt: Number(`${current_time}`),UID: Number(`${req.params.UID_Device}`) } }).toArray(function (err, result) {
+            console.log(result.length);
+            console.log(current_time);
             for (var i = 0; i < result.length; i++) {
 
                 var data_time = result[i].Timestamp;
@@ -275,7 +276,7 @@ router.post('/test/RTECG/:UID_Device', function (req, res) {
 
 })
 
-router.post('/test/SEECG/:UID_Device/:data_start_ms/:date_end_ms', function (req, res) {
+router.post('/SEECG/:UID_Device/:data_start_ms/:date_end_ms', function (req, res) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
         var current_time = Date.now();
@@ -299,7 +300,7 @@ router.post('/test/SEECG/:UID_Device/:data_start_ms/:date_end_ms', function (req
 
         var response_json;
         db_read = db.db("TestServer");
-        db_read.collection("ecg").find({ /*Timestamp: { $gt: `${start_time}`, $lt: `${end_time}` },*/UID: Number(`${req.params.UID_Device}`) }).toArray(function (err, result) {
+        db_read.collection("ecg").find({ Timestamp: { $gt: `${start_time}`, $lt: `${end_time}` },UID: Number(`${req.params.UID_Device}`) }).toArray(function (err, result) {
             console.log(result);
             //console.log(result);
             for (var i = 0; i < result.length; i++) {
@@ -368,7 +369,7 @@ router.post('/test/SEECG/:UID_Device/:data_start_ms/:date_end_ms', function (req
             }
 
             response_json = {
-                "date": current_time,
+                "date": currendat_time,
                 "data_point_amount": result.length,
                 "L1": L1_datapoints,
                 "L2": L2_datapoints,
