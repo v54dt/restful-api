@@ -155,7 +155,7 @@ namespace IO.Swagger.Controllers
         [ValidateModelState]
         [SwaggerOperation("SEECGUIDDeviceDataStartMsDateEndMsPost")]
         [SwaggerResponse(statusCode: 200, type: typeof(EcgData), description: "OK")]
-        public virtual IActionResult SEECGUIDDeviceDataStartMsDateEndMsPost([FromRoute][Required]string uIDDevice, [FromRoute][Required]string dataStartMs, [FromRoute][Required]string dateEndMs)
+        public virtual IActionResult SEECGUIDDeviceDataStartMsDateEndMsPost([FromRoute][Required]string uIDDevice, [FromRoute][Required]int? dataStartMs, [FromRoute][Required]int? dateEndMs)
         { 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(EcgData));
