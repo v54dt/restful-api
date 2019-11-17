@@ -15,63 +15,63 @@ MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
     var UID = 10015;
     var Name = "王小明"
 
- 
+
     //1553240835494
     //1553240985105.09
     //149611 ms
-    
+
     async.forever(function (callback) {
 
         if (err) throw err;
-        var start = Number(Date.now());
-        console.log("Start time");
-        console.log(start);
-        fs.createReadStream('ecg_data_0.csv')
+        //var start = Number(Date.now());
+        //console.log("Start time");
+        //console.log(start);
+        fs.createReadStream('ecg_data_50000.csv')
             .pipe(csv())
             .on('data', (row) => {
                 //console.log("data");
-                if (row.device_id == 3) {
-                    var current_time = Number(Date.now());
-                    var start_time = 1553240835494;
-                    var t_shift = current_time - start_time;
-                    var t = Number(Math.floor(row.timestamp)) + t_shift;
-                    var ecg_data = [
-                        { "CH": "L1", "value": Number(row.data) },
-                        { "CH": "L2", "value": Number(row.data) },
-                        { "CH": "L3", "value": Number(row.data) },
-                        { "CH": "aVL", "value": Number(row.data) },
-                        { "CH": "aVF", "value": Number(row.data) },
-                        { "CH": "aVR", "value": Number(row.data) },
-                        { "CH": "v1", "value": Number(row.data) },
-                        { "CH": "v2", "value": Number(row.data) },
-                        { "CH": "v3", "value": Number(row.data) },
-                        { "CH": "v4", "value": Number(row.data) },
-                        { "CH": "v5", "value": Number(row.data) },
-                        { "CH": "v6", "value": Number(row.data) }
-                    ];
 
-                    var mongo_obj = {
-                        UID: UID,
-                        Name: Name,
-                        Sensor_mac: sensor_mac,
-                        ECG_data: ecg_data,
-                        Timestamp: t
-                    };
+                var current_time = Number(Date.now());
+                var start_time = 1561443546112;
+                var t_shift = current_time - start_time;
+                var t = Number(Math.floor(row.timestamp)) + t_shift;
+                var ecg_data = [
+                    { "CH": "L1", "value": Number(row.L1) },
+                    { "CH": "L2", "value": Number(row.L2) },
+                    { "CH": "L3", "value": Number(row.L3) },
+                    { "CH": "aVL", "value": Number(row.aVL) },
+                    { "CH": "aVF", "value": Number(row.aVF) },
+                    { "CH": "aVR", "value": Number(row.aVR) },
+                    { "CH": "v1", "value": Number(row.v1) },
+                    { "CH": "v2", "value": Number(row.v2) },
+                    { "CH": "v3", "value": Number(row.v3) },
+                    { "CH": "v4", "value": Number(row.v4) },
+                    { "CH": "v5", "value": Number(row.v5) },
+                    { "CH": "v6", "value": Number(row.v6) }
+                ];
 
-                    db_write.collection("ecg_test_1101").insertOne(mongo_obj);
+                var mongo_obj = {
+                    UID: UID,
+                    Name: Name,
+                    Sensor_mac: sensor_mac,
+                    ECG_data: ecg_data,
+                    Timestamp: t
+                };
 
-                }
+                db_write.collection("ecg").insertOne(mongo_obj);
+
+
             })
             .on('end', () => {
-                console.log('CSV file successfully processed');
-                var end = Date.now();
-                console.log(end);
+                //console.log('CSV file successfully processed');
+                //var end = Date.now();
+                //console.log(end);
                 setTimeout(function () {
                     callback();
-                }, 149611) // id = 3 , data length = 149611 ms
+                }, 197332) // usdrId = 1 , data length = 197332 ms , id >= 8897527 , <= 8947526
             });
-    },function(err){
-        console.log(err);
+    }, function (err) {
+        //console.log(err);
     });
 
 });
