@@ -168,7 +168,7 @@
           "description" : "The Start Timestamp of a Requested Data Interval (19 digits Unix Time Format)",
           "required" : true,
           "schema" : {
-            "type" : "string"
+            "type" : "integer"
           }
         }, {
           "name" : "date_end_ms",
@@ -176,7 +176,7 @@
           "description" : "The End Timestamp of a Requested Data Interval (19 digits Unix Time Format)",
           "required" : true,
           "schema" : {
-            "type" : "string"
+            "type" : "integer"
           }
         } ],
         "responses" : {
