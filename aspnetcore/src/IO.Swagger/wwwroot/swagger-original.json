@@ -14,14 +14,12 @@
   },
   "servers" : [ {
     "url" : "https://virtserver.swaggerhub.com/v54dt/ecg_restful/1.0.0"
-  }, {
-    "url" : "http://virtserver.swaggerhub.com/v54dt/ecg_restful/1.0.0"
   } ],
   "tags" : [ {
     "name" : "ECG"
   } ],
   "paths" : {
-    "/login_RPN_list" : {
+    "/test/login_RPN_list" : {
       "get" : {
         "tags" : [ "ECG" ],
         "responses" : {
