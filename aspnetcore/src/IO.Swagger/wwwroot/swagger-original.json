@@ -21,7 +21,7 @@
     "name" : "ECG"
   } ],
   "paths" : {
-    "/test/login_RPN_list" : {
+    "/login_RPN_list" : {
       "get" : {
         "tags" : [ "ECG" ],
         "responses" : {
@@ -38,7 +38,7 @@
         }
       }
     },
-    "/test/RPN_device_list/{id}" : {
+    "/RPN_device_list/{id}" : {
       "post" : {
         "tags" : [ "ECG" ],
         "parameters" : [ {
@@ -67,7 +67,7 @@
         }
       }
     },
-    "/test/RPN_device_pair/{UID_RPN}/{BLE_NAME}/{MRN}" : {
+    "/RPN_device_pair/{UID_RPN}/{BLE_NAME}/{MRN}" : {
       "post" : {
         "tags" : [ "ECG" ],
         "parameters" : [ {
@@ -115,7 +115,7 @@
         }
       }
     },
-    "/test/RPN_device_unpair/{BLE_NAME}" : {
+    "/RPN_device_unpair/{BLE_NAME}" : {
       "post" : {
         "tags" : [ "ECG" ],
         "parameters" : [ {
@@ -143,7 +143,7 @@
         }
       }
     },
-    "/test/RTECG/{UID_Device}" : {
+    "/RTECG/{UID_Device}" : {
       "post" : {
         "tags" : [ "ECG" ],
         "parameters" : [ {
@@ -171,7 +171,7 @@
         }
       }
     },
-    "/test/SEECG/{UID_Device}/{data_start_ms}/{date_end_ms}" : {
+    "/SEECG/{UID_Device}/{data_start_ms}/{date_end_ms}" : {
       "post" : {
         "tags" : [ "ECG" ],
         "parameters" : [ {

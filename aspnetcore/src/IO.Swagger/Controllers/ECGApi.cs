@@ -32,11 +32,11 @@ namespace IO.Swagger.Controllers
         /// </summary>
         /// <response code="200">successful operation</response>
         [HttpGet]
-        [Route("/v54dt/ecg_restful/1.0.0/test/login_RPN_list")]
+        [Route("/v54dt/ecg_restful/1.0.0/login_RPN_list")]
         [ValidateModelState]
-        [SwaggerOperation("TestLoginRPNListGet")]
+        [SwaggerOperation("LoginRPNListGet")]
         [SwaggerResponse(statusCode: 200, type: typeof(RPNList), description: "successful operation")]
-        public virtual IActionResult TestLoginRPNListGet()
+        public virtual IActionResult LoginRPNListGet()
         { 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(RPNList));
@@ -55,11 +55,11 @@ namespace IO.Swagger.Controllers
         /// <param name="id">ID of pet to return</param>
         /// <response code="200">successful operation</response>
         [HttpPost]
-        [Route("/v54dt/ecg_restful/1.0.0/test/RPN_device_list/{id}")]
+        [Route("/v54dt/ecg_restful/1.0.0/RPN_device_list/{id}")]
         [ValidateModelState]
-        [SwaggerOperation("TestRPNDeviceListIdPost")]
+        [SwaggerOperation("RPNDeviceListIdPost")]
         [SwaggerResponse(statusCode: 200, type: typeof(RPNDeviceList), description: "successful operation")]
-        public virtual IActionResult TestRPNDeviceListIdPost([FromRoute][Required]long? id)
+        public virtual IActionResult RPNDeviceListIdPost([FromRoute][Required]long? id)
         { 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(RPNDeviceList));
@@ -80,11 +80,11 @@ namespace IO.Swagger.Controllers
         /// <param name="MRN">t</param>
         /// <response code="200">t</response>
         [HttpPost]
-        [Route("/v54dt/ecg_restful/1.0.0/test/RPN_device_pair/{UID_RPN}/{BLE_NAME}/{MRN}")]
+        [Route("/v54dt/ecg_restful/1.0.0/RPN_device_pair/{UID_RPN}/{BLE_NAME}/{MRN}")]
         [ValidateModelState]
-        [SwaggerOperation("TestRPNDevicePairUIDRPNBLENAMEMRNPost")]
+        [SwaggerOperation("RPNDevicePairUIDRPNBLENAMEMRNPost")]
         [SwaggerResponse(statusCode: 200, type: typeof(RPNDevicePair), description: "t")]
-        public virtual IActionResult TestRPNDevicePairUIDRPNBLENAMEMRNPost([FromRoute][Required]string UID_RPN, [FromRoute][Required]string BLE_NAME, [FromRoute][Required]string MRN)
+        public virtual IActionResult RPNDevicePairUIDRPNBLENAMEMRNPost([FromRoute][Required]string UID_RPN, [FromRoute][Required]string BLE_NAME, [FromRoute][Required]string MRN)
         { 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(RPNDevicePair));
@@ -103,11 +103,11 @@ namespace IO.Swagger.Controllers
         /// <param name="BLE_NAME">t</param>
         /// <response code="200">OK</response>
         [HttpPost]
-        [Route("/v54dt/ecg_restful/1.0.0/test/RPN_device_unpair/{BLE_NAME}")]
+        [Route("/v54dt/ecg_restful/1.0.0/RPN_device_unpair/{BLE_NAME}")]
         [ValidateModelState]
-        [SwaggerOperation("TestRPNDeviceUnpairBLENAMEPost")]
+        [SwaggerOperation("RPNDeviceUnpairBLENAMEPost")]
         [SwaggerResponse(statusCode: 200, type: typeof(RPNDeviceUnpair), description: "OK")]
-        public virtual IActionResult TestRPNDeviceUnpairBLENAMEPost([FromRoute][Required]string BLE_NAME)
+        public virtual IActionResult RPNDeviceUnpairBLENAMEPost([FromRoute][Required]string BLE_NAME)
         { 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(RPNDeviceUnpair));
@@ -126,11 +126,11 @@ namespace IO.Swagger.Controllers
         /// <param name="uIDDevice">t</param>
         /// <response code="200">OK</response>
         [HttpPost]
-        [Route("/v54dt/ecg_restful/1.0.0/test/RTECG/{UID_Device}")]
+        [Route("/v54dt/ecg_restful/1.0.0/RTECG/{UID_Device}")]
         [ValidateModelState]
-        [SwaggerOperation("TestRTECGUIDDevicePost")]
+        [SwaggerOperation("RTECGUIDDevicePost")]
         [SwaggerResponse(statusCode: 200, type: typeof(EcgData), description: "OK")]
-        public virtual IActionResult TestRTECGUIDDevicePost([FromRoute][Required]string uIDDevice)
+        public virtual IActionResult RTECGUIDDevicePost([FromRoute][Required]string uIDDevice)
         { 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(EcgData));
@@ -151,11 +151,11 @@ namespace IO.Swagger.Controllers
         /// <param name="dateEndMs">t</param>
         /// <response code="200">OK</response>
         [HttpPost]
-        [Route("/v54dt/ecg_restful/1.0.0/test/SEECG/{UID_Device}/{data_start_ms}/{date_end_ms}")]
+        [Route("/v54dt/ecg_restful/1.0.0/SEECG/{UID_Device}/{data_start_ms}/{date_end_ms}")]
         [ValidateModelState]
-        [SwaggerOperation("TestSEECGUIDDeviceDataStartMsDateEndMsPost")]
+        [SwaggerOperation("SEECGUIDDeviceDataStartMsDateEndMsPost")]
         [SwaggerResponse(statusCode: 200, type: typeof(EcgData), description: "OK")]
-        public virtual IActionResult TestSEECGUIDDeviceDataStartMsDateEndMsPost([FromRoute][Required]string uIDDevice, [FromRoute][Required]string dataStartMs, [FromRoute][Required]string dateEndMs)
+        public virtual IActionResult SEECGUIDDeviceDataStartMsDateEndMsPost([FromRoute][Required]string uIDDevice, [FromRoute][Required]string dataStartMs, [FromRoute][Required]string dateEndMs)
         { 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(EcgData));
