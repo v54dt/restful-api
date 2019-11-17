@@ -70,7 +70,7 @@
         "parameters" : [ {
           "name" : "UID_RPN",
           "in" : "path",
-          "description" : "t",
+          "description" : "Registered Professional Nurse ID",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -80,7 +80,7 @@
         }, {
           "name" : "Device_ID",
           "in" : "path",
-          "description" : "t",
+          "description" : "Device ID ( or MAC address )",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -90,7 +90,7 @@
         }, {
           "name" : "MRN",
           "in" : "path",
-          "description" : "t",
+          "description" : "Medical Record Number",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -112,18 +112,18 @@
         }
       }
     },
-    "/RPN_device_unpair/{BLE_NAME}" : {
+    "/RPN_device_unpair/{Device_ID}" : {
       "post" : {
         "tags" : [ "ECG" ],
         "parameters" : [ {
-          "name" : "BLE_NAME",
+          "name" : "Device_ID",
           "in" : "path",
-          "description" : "t",
+          "description" : "Device ID ( or MAC address )",
           "required" : true,
           "style" : "simple",
           "explode" : false,
           "schema" : {
-            "type" : "string"
+            "type" : "integer"
           }
         } ],
         "responses" : {
@@ -146,7 +146,7 @@
         "parameters" : [ {
           "name" : "UID_Device",
           "in" : "path",
-          "description" : "t",
+          "description" : "Device ID ( or MAC address )",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -174,7 +174,7 @@
         "parameters" : [ {
           "name" : "UID_Device",
           "in" : "path",
-          "description" : "t",
+          "description" : "Device ID ( or MAC address )",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -184,7 +184,7 @@
         }, {
           "name" : "data_start_ms",
           "in" : "path",
-          "description" : "t",
+          "description" : "The Start Timestamp of a Requested Data Interval (19 digits Unix Time Format)",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -194,7 +194,7 @@
         }, {
           "name" : "date_end_ms",
           "in" : "path",
-          "description" : "t",
+          "description" : "The End Timestamp of a Requested Data Interval (19 digits Unix Time Format)",
           "required" : true,
           "style" : "simple",
           "explode" : false,

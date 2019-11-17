@@ -75,9 +75,9 @@ namespace IO.Swagger.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="UID_RPN">t</param>
-        /// <param name="deviceID">t</param>
-        /// <param name="MRN">t</param>
+        /// <param name="UID_RPN">Registered Professional Nurse ID</param>
+        /// <param name="deviceID">Device ID ( or MAC address )</param>
+        /// <param name="MRN">Medical Record Number</param>
         /// <response code="200">t</response>
         [HttpPost]
         [Route("/v54dt/ecg_restful/1.0.0/RPN_device_pair/{UID_RPN}/{Device_ID}/{MRN}")]
@@ -100,14 +100,14 @@ namespace IO.Swagger.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="BLE_NAME">t</param>
+        /// <param name="deviceID">Device ID ( or MAC address )</param>
         /// <response code="200">OK</response>
         [HttpPost]
-        [Route("/v54dt/ecg_restful/1.0.0/RPN_device_unpair/{BLE_NAME}")]
+        [Route("/v54dt/ecg_restful/1.0.0/RPN_device_unpair/{Device_ID}")]
         [ValidateModelState]
-        [SwaggerOperation("RPNDeviceUnpairBLENAMEPost")]
+        [SwaggerOperation("RPNDeviceUnpairDeviceIDPost")]
         [SwaggerResponse(statusCode: 200, type: typeof(RPNDeviceUnpair), description: "OK")]
-        public virtual IActionResult RPNDeviceUnpairBLENAMEPost([FromRoute][Required]string BLE_NAME)
+        public virtual IActionResult RPNDeviceUnpairDeviceIDPost([FromRoute][Required]int? deviceID)
         { 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(RPNDeviceUnpair));
@@ -123,7 +123,7 @@ namespace IO.Swagger.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="uIDDevice">t</param>
+        /// <param name="uIDDevice">Device ID ( or MAC address )</param>
         /// <response code="200">OK</response>
         [HttpPost]
         [Route("/v54dt/ecg_restful/1.0.0/RTECG/{UID_Device}")]
@@ -146,9 +146,9 @@ namespace IO.Swagger.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="uIDDevice">t</param>
-        /// <param name="dataStartMs">t</param>
-        /// <param name="dateEndMs">t</param>
+        /// <param name="uIDDevice">Device ID ( or MAC address )</param>
+        /// <param name="dataStartMs">The Start Timestamp of a Requested Data Interval (19 digits Unix Time Format)</param>
+        /// <param name="dateEndMs">The End Timestamp of a Requested Data Interval (19 digits Unix Time Format)</param>
         /// <response code="200">OK</response>
         [HttpPost]
         [Route("/v54dt/ecg_restful/1.0.0/SEECG/{UID_Device}/{data_start_ms}/{date_end_ms}")]
