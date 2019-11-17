@@ -52,7 +52,7 @@ namespace IO.Swagger.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id">ID of pet to return</param>
+        /// <param name="id"></param>
         /// <response code="200">successful operation</response>
         [HttpPost]
         [Route("/v54dt/ecg_restful/1.0.0/RPN_device_list/{id}")]
@@ -76,15 +76,15 @@ namespace IO.Swagger.Controllers
         /// 
         /// </summary>
         /// <param name="UID_RPN">t</param>
-        /// <param name="BLE_NAME">t</param>
+        /// <param name="deviceID">t</param>
         /// <param name="MRN">t</param>
         /// <response code="200">t</response>
         [HttpPost]
-        [Route("/v54dt/ecg_restful/1.0.0/RPN_device_pair/{UID_RPN}/{BLE_NAME}/{MRN}")]
+        [Route("/v54dt/ecg_restful/1.0.0/RPN_device_pair/{UID_RPN}/{Device_ID}/{MRN}")]
         [ValidateModelState]
-        [SwaggerOperation("RPNDevicePairUIDRPNBLENAMEMRNPost")]
+        [SwaggerOperation("RPNDevicePairUIDRPNDeviceIDMRNPost")]
         [SwaggerResponse(statusCode: 200, type: typeof(RPNDevicePair), description: "t")]
-        public virtual IActionResult RPNDevicePairUIDRPNBLENAMEMRNPost([FromRoute][Required]string UID_RPN, [FromRoute][Required]string BLE_NAME, [FromRoute][Required]string MRN)
+        public virtual IActionResult RPNDevicePairUIDRPNDeviceIDMRNPost([FromRoute][Required]int? UID_RPN, [FromRoute][Required]int? deviceID, [FromRoute][Required]int? MRN)
         { 
             //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
             // return StatusCode(200, default(RPNDevicePair));

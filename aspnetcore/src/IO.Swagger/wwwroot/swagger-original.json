@@ -42,7 +42,6 @@
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
-          "description" : "ID of pet to return",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -65,7 +64,7 @@
         }
       }
     },
-    "/RPN_device_pair/{UID_RPN}/{BLE_NAME}/{MRN}" : {
+    "/RPN_device_pair/{UID_RPN}/{Device_ID}/{MRN}" : {
       "post" : {
         "tags" : [ "ECG" ],
         "parameters" : [ {
@@ -76,17 +75,17 @@
           "style" : "simple",
           "explode" : false,
           "schema" : {
-            "type" : "string"
+            "type" : "integer"
           }
         }, {
-          "name" : "BLE_NAME",
+          "name" : "Device_ID",
           "in" : "path",
           "description" : "t",
           "required" : true,
           "style" : "simple",
           "explode" : false,
           "schema" : {
-            "type" : "string"
+            "type" : "integer"
           }
         }, {
           "name" : "MRN",
@@ -96,7 +95,7 @@
           "style" : "simple",
           "explode" : false,
           "schema" : {
-            "type" : "string"
+            "type" : "integer"
           }
         } ],
         "responses" : {
