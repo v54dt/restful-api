@@ -30,6 +30,28 @@ namespace IO.Swagger.Controllers
         /// <summary>
         /// 
         /// </summary>
+        /// <response code="200">successful operation</response>
+        [HttpGet]
+        [Route("/v54dt/ecg_restful/1.0.0/login_RPN_list")]
+        [ValidateModelState]
+        [SwaggerOperation("LoginRPNListGet")]
+        [SwaggerResponse(statusCode: 200, type: typeof(RPNList), description: "successful operation")]
+        public virtual IActionResult LoginRPNListGet()
+        { 
+            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
+            // return StatusCode(200, default(RPNList));
+            string exampleJson = null;
+            exampleJson = "{\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"RPN\" : [ {\n    \"UID_RPN\" : 10015,\n    \"Name\" : \"陳小姐\"\n  }, {\n    \"UID_RPN\" : 10015,\n    \"Name\" : \"陳小姐\"\n  } ]\n}";
+            
+                        var example = exampleJson != null
+                        ? JsonConvert.DeserializeObject<RPNList>(exampleJson)
+                        : default(RPNList);            //TODO: Change the data returned
+            return new ObjectResult(example);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="id"></param>
         /// <response code="200">successful operation</response>
         [HttpPost]
@@ -143,28 +165,6 @@ namespace IO.Swagger.Controllers
                         var example = exampleJson != null
                         ? JsonConvert.DeserializeObject<EcgData>(exampleJson)
                         : default(EcgData);            //TODO: Change the data returned
-            return new ObjectResult(example);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <response code="200">successful operation</response>
-        [HttpGet]
-        [Route("/v54dt/ecg_restful/1.0.0/test/login_RPN_list")]
-        [ValidateModelState]
-        [SwaggerOperation("TestLoginRPNListGet")]
-        [SwaggerResponse(statusCode: 200, type: typeof(RPNList), description: "successful operation")]
-        public virtual IActionResult TestLoginRPNListGet()
-        { 
-            //TODO: Uncomment the next line to return response 200 or use other options such as return this.NotFound(), return this.BadRequest(..), ...
-            // return StatusCode(200, default(RPNList));
-            string exampleJson = null;
-            exampleJson = "{\n  \"date\" : \"2000-01-23T04:56:07.000+00:00\",\n  \"RPN\" : [ {\n    \"UID_RPN\" : 10015,\n    \"Name\" : \"陳小姐\"\n  }, {\n    \"UID_RPN\" : 10015,\n    \"Name\" : \"陳小姐\"\n  } ]\n}";
-            
-                        var example = exampleJson != null
-                        ? JsonConvert.DeserializeObject<RPNList>(exampleJson)
-                        : default(RPNList);            //TODO: Change the data returned
             return new ObjectResult(example);
         }
     }
