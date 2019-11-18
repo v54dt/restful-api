@@ -7,7 +7,7 @@ var config = require('./config');
 var MongoClient = require('mongodb').MongoClient;
 var url = config.db_path;
 
-router.get('/test', function (req, res, next) {
+router.get('/test', function (req, res) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
         var db_read = db.db("TestServer");
@@ -32,7 +32,7 @@ router.get('/test', function (req, res, next) {
 
 
 
-router.get('/login_RPN_list', function (req, res, next) {
+router.get('/login_RPN_list', function (req, res) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
         var db_read = db.db("TestServer");
@@ -88,15 +88,15 @@ router.post('/RPN_device_list/:id', function (req, res) {
 });
 
 
-router.post('/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
-    if (req.params.UID_RPN && req.params.BLE_NAME && req.params.MRN) {
+router.post('/RPN_device_pair/:UID_RPN/:Device_ID/:MRN', function (req, res) {
+    if (req.params.UID_RPN && req.params.Device_ID && req.params.MRN) {
         MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
             db_read = db.db("TestServer");
 
             async.parallel([
                 function (finish) {
-                    db_read.collection("Sensor").find({ device_id: Number(`${req.params.BLE_NAME}`) }).toArray(function (err1, res1) {
+                    db_read.collection("Sensor").find({ device_id: Number(`${req.params.Device_ID}`) }).toArray(function (err1, res1) {
                         finish(err1, res1);
                     })
                 },
@@ -146,11 +146,11 @@ router.post('/RPN_device_pair/:UID_RPN/:BLE_NAME/:MRN', function (req, res) {
 })
 
 
-router.post('/RPN_device_unpair/:BLE_name', function (req, res) {
+router.post('/RPN_device_unpair/:Device_ID', function (req, res) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
         db_read = db.db("TestServer");
-        db_read.collection("sensor_relations").deleteOne({ UID: Number(`${req.params.BLE_name}`) }, function (err, result) {
+        db_read.collection("sensor_relations").deleteOne({ UID: Number(`${req.params.Device_ID}`) }, function (err, result) {
             if (err) throw err;
             //console.log(result);
             var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);   //UTC+8
