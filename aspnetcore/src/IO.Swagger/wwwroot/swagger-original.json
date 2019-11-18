@@ -19,7 +19,7 @@
     "name" : "ECG"
   } ],
   "paths" : {
-    "/login_RPN_list" : {
+    "/test/login_RPN_list" : {
       "get" : {
         "tags" : [ "ECG" ],
         "responses" : {
