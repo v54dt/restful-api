@@ -8,6 +8,10 @@
       "email" : "vincent71497867@gmail.com"
     }
   },
+  "externalDocs" : {
+    "description" : "Find out more about Swagger",
+    "url" : "http://swagger.io"
+  },
   "tags" : [ {
     "name" : "ECG",
     "description" : ""
@@ -199,10 +203,6 @@
         }
       }
     }
-  },
-  "externalDocs" : {
-    "description" : "Find out more about Swagger",
-    "url" : "http://swagger.io"
   },
   "servers" : [ {
     "url" : "https://virtserver.swaggerhub.com/v54dt/ecg_restful/1.0.0"
