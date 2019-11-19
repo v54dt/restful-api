@@ -11,6 +11,9 @@
   "tags" : [ {
     "name" : "ECG",
     "description" : ""
+  }, {
+    "name" : "ECG(For Grafana SimpleJSON backend)",
+    "description" : ""
   } ],
   "paths" : {
     "/login_RPN_list" : {
@@ -197,6 +200,38 @@
             }
           }
         }
+      }
+    },
+    "/" : {
+      "post" : {
+        "tags" : [ "ECG(For Grafana SimpleJSON backend)" ],
+        "description" : "",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : null
+            }
+          }
+        }
+      }
+    },
+    "/search" : {
+      "post" : {
+        "tags" : [ "ECG(For Grafana SimpleJSON backend)" ],
+        "responses" : {
+          "200" : null
+        }
+      }
+    },
+    "/query" : {
+      "post" : {
+        "tags" : [ "ECG(For Grafana SimpleJSON backend)" ]
+      }
+    },
+    "/annotations" : {
+      "post" : {
+        "tags" : [ "ECG(For Grafana SimpleJSON backend)" ]
       }
     }
   },
