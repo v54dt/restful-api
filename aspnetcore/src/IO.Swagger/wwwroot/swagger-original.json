@@ -2,7 +2,6 @@
   "openapi" : "3.0.0",
   "info" : {
     "title" : "ECG Restful API",
-    "description" : "TEXT\n",
     "contact" : {
       "email" : "vincent71497867@gmail.com"
     },
@@ -22,6 +21,7 @@
     "/login_RPN_list" : {
       "get" : {
         "tags" : [ "ECG" ],
+        "description" : "Show All Registered Professional Nurse (R.P.N) Info",
         "responses" : {
           "200" : {
             "description" : "successful operation",
@@ -39,6 +39,7 @@
     "/RPN_device_list/{id}" : {
       "post" : {
         "tags" : [ "ECG" ],
+        "description" : "Show Paired Device Status Which are Managed by R.P.N",
         "parameters" : [ {
           "name" : "id",
           "in" : "path",
@@ -67,6 +68,7 @@
     "/RPN_device_pair/{UID_RPN}/{Device_ID}/{MRN}" : {
       "post" : {
         "tags" : [ "ECG" ],
+        "description" : "Paired Nurse, Device, Patient together",
         "parameters" : [ {
           "name" : "UID_RPN",
           "in" : "path",
@@ -115,6 +117,7 @@
     "/RPN_device_unpair/{Device_ID}" : {
       "post" : {
         "tags" : [ "ECG" ],
+        "description" : "Unpaired Device to Nurse and Patient",
         "parameters" : [ {
           "name" : "Device_ID",
           "in" : "path",
@@ -143,6 +146,7 @@
     "/RTECG/{UID_Device}" : {
       "post" : {
         "tags" : [ "ECG" ],
+        "description" : "Get Device`s Real-Time 12-Lead Data",
         "parameters" : [ {
           "name" : "UID_Device",
           "in" : "path",
@@ -171,6 +175,7 @@
     "/SEECG/{UID_Device}/{data_start_ms}/{date_end_ms}" : {
       "post" : {
         "tags" : [ "ECG" ],
+        "description" : "Get Device`s Previous 12-Lead Data",
         "parameters" : [ {
           "name" : "UID_Device",
           "in" : "path",
