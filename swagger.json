@@ -13,7 +13,7 @@
     "description" : ""
   }, {
     "name" : "ECG(For Grafana SimpleJSON backend)",
-    "description" : ""
+    "description" : "Low Performance Currently"
   } ],
   "paths" : {
     "/login_RPN_list" : {
