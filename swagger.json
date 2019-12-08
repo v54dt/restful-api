@@ -1,7 +1,7 @@
 {
   "openapi" : "3.0.0",
   "info" : {
-    "description" : "",
+    "description" : "source code :[https://github.com/v54dt/restful-api](https://github.com/v54dt/restful-api)",
     "version" : "1.0.0-oas3",
     "title" : "ECG Restful API",
     "contact" : {
@@ -11,6 +11,9 @@
   "tags" : [ {
     "name" : "ECG",
     "description" : ""
+  }, {
+    "name" : "ECG(For Grafana SimpleJSON backend)",
+    "description" : "Low Performance Currently"
   } ],
   "paths" : {
     "/login_RPN_list" : {
@@ -197,6 +200,38 @@
             }
           }
         }
+      }
+    },
+    "/" : {
+      "post" : {
+        "tags" : [ "ECG(For Grafana SimpleJSON backend)" ],
+        "description" : "",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : null
+            }
+          }
+        }
+      }
+    },
+    "/search" : {
+      "post" : {
+        "tags" : [ "ECG(For Grafana SimpleJSON backend)" ],
+        "responses" : {
+          "200" : null
+        }
+      }
+    },
+    "/query" : {
+      "post" : {
+        "tags" : [ "ECG(For Grafana SimpleJSON backend)" ]
+      }
+    },
+    "/annotations" : {
+      "post" : {
+        "tags" : [ "ECG(For Grafana SimpleJSON backend)" ]
       }
     }
   },
