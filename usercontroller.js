@@ -1,12 +1,153 @@
 var express = require('express');
 var async = require('async');
 var router = express.Router();
-//var mongodb = require('./mongodb');
 var config = require('./config');
+var bodyParser = require('body-parser')
+
+router.use(bodyParser.json());
 
 var MongoClient = require('mongodb').MongoClient;
 var url = config.db_path;
 
+// grafana simplejson http header
+function setCORSHeaders(res) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST');
+    res.setHeader('Access-Control-Allow-Headers', 'accept, content-type');
+}
+
+router.all('/', function (req, res) {
+    setCORSHeaders(res);
+    res.send('HR');
+    res.end();
+});
+
+router.all('/search', function (req, res) {
+
+    setCORSHeaders(res);
+    var target = [];
+    MongoClient.connect('mongodb://localhost:27017', { useNewUrlParser: true }, function (err, db) {
+        var db_read = db.db("TestServer");
+        db_read.collection("Patient").find({}).toArray(function (req, result) {
+
+            for (var i = 0; i < result.length; i++){
+                target.push(result[i].Patient_Name);
+            }
+            res.json(target);
+            res.end();
+        })
+        db.close();
+    })
+
+
+});
+
+router.all('/annotations ', function (req, res) {
+    console.log("anno");
+    setCORSHeaders(res);
+    var annotations = [];
+    res.json(annotations);
+    res.end();
+});
+
+router.all('/query', function (req, res) {
+
+    console.log(req.body.targets);
+    
+    /*for (i in req.body.targets) {
+        console.log("");
+      }
+    */
+    //var targets = JSON.parse(req.body.targets[0]);
+    //console.log(targets);
+    //console.log(req.body.targets);
+    //var tar = req.body.targets;
+    //var targ = Object.assign({},tar);
+    //console.log(targ[0]);
+    //var targt = targ[0];
+    //var tttt= Object.assign({},targt);
+    //console.log(tttt.target);
+    //JSONObject tableInfoObj = new JSONObject();
+    //JSON t = req.body.targets;
+    //var test = JSON.parse(req.body.targets);
+    //console.log(test);
+    //console.log(req.body.targets[0]);
+
+    //console.log(test);
+
+    setCORSHeaders(res);
+    MongoClient.connect('mongodb://localhost:27017', { useNewUrlParser: true }, function (err, db) {
+
+        var db_read = db.db("TestServer");
+        //console.log(temp);
+        var temp = req.body.range;
+        var range = Object.assign({}, temp);
+        var from = (new Date(range.from)).getTime();
+        var to = (new Date(range.to)).getTime();
+
+        var L1_datapoints = [];
+        //console.log(from);
+        //console.log(to);
+        db_read.collection("ecg").find({ Timestamp: { $gt: Number(`${from}`), $lt: Number(`${to}`) } }).sort({ Timestamp: 1 }).toArray(function (err, result) {
+
+            console.log(`result length ${result.length}`);
+
+
+            for (var i = 0; i < result.length; i++) {
+                var data_time = result[i].Timestamp;
+                var pointData_L1 = [];
+                pointData_L1.push(result[i].ECG_data[0].value);
+                pointData_L1.push(data_time);
+                L1_datapoints.push(pointData_L1);
+            }
+
+            var targetData = {
+                'target': '10015',
+                'datapoints': L1_datapoints
+            };
+            var targetDataList = [];
+            targetDataList.push(targetData);
+
+
+            //console.log(from);
+            //console.log(to);
+
+            //res.json(targetDataList);
+            res.json(targetDataList);
+            res.end();
+        })
+    })
+    /*
+         var maxSize = 1000;
+ 
+        
+         if (req && req.body && req.body.range) {
+             //console.log(req.body);
+             maxSize = req.body.maxDataPoints;
+             from = req.body.range.from;
+             to = req.body.range.to;
+         }
+ 
+         //var from_time = (new Date(from).getTime());
+         //var to_time = (new Date(to).getTime());
+ 
+         var maxSize = (to_time - from_time) / 5000;
+         //console.log(maxSize);
+         var dataList = [];
+ 
+         for (let i = 0; i < maxSize; i++) {
+             var pointData = [];
+             var hr = Math.round(75 + (Math.random() * 5 - 5));
+ 
+             pointData.push(hr);
+             pointData.push(from_time + i * 5000);
+ 
+             dataList.push(pointData);
+         }
+ */
+
+
+});
 router.get('/test', function (req, res) {
     MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
