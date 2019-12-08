@@ -15,5 +15,5 @@ app.use('/', UserController);
 app.use(bodyParser.json());
 */
 app.listen(config.PORT, function () {
-    console.log('listening on port 3000!');
+    console.log('listening on port 7000!');
 })
