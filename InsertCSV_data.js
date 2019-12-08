@@ -1,10 +1,13 @@
 
 var MongoClient = require('mongodb').MongoClient;
 var async = require('async');
+var sync = require('sync');
 var url = "mongodb://localhost:27017";
 
 const csv = require('csv-parser');
 const fs = require('fs');
+
+
 
 MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
     if (err) throw err;
@@ -23,9 +26,9 @@ MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
     async.forever(function (callback) {
 
         if (err) throw err;
-        //var start = Number(Date.now());
-        //console.log("Start time");
-        //console.log(start);
+        var start = new Date(Date.now());
+        console.log(`Start Time: ${start}`);
+       
         fs.createReadStream('ecg_data_50000.csv')
             .pipe(csv())
             .on('data', (row) => {
@@ -57,18 +60,21 @@ MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
                     ECG_data: ecg_data,
                     Timestamp: t
                 };
-
+                
                 db_write.collection("ecg").insertOne(mongo_obj);
 
+                
+                
+                
 
             })
             .on('end', () => {
                 //console.log('CSV file successfully processed');
-                //var end = Date.now();
-                //console.log(end);
+                var end = new Date(Date.now());
+                console.log(`End Time:   ${end}`)
                 setTimeout(function () {
                     callback();
-                }, 197332) // usdrId = 1 , data length = 197332 ms , id >= 8897527 , <= 8947526
+                }, 10000) // usdrId = 1 , data length = 197332 ms , id >= 8897527 , <= 8947526
             });
     }, function (err) {
         //console.log(err);
