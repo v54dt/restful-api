@@ -182,7 +182,7 @@ router.get('/login_RPN_list', function (req, res) {
 
             var rpn = [];
             for (var i = 0; i < result.length; i++) {
-                rpn.push({ "RPN_ID": result[i].RPN_ID, "Name": result[i].RPN_Name })
+                rpn.push({ "RPN_ID": result[i].RPN_ID, "RPN_Name": result[i].RPN_Name })
             }
 
             var response_json = {
@@ -228,66 +228,105 @@ router.post('/RPN_device_list/:ID', function (req, res) {
 });
 
 
-router.post('/RPN_device_pair/:RPN_ID/:Device_ID/:MRN', function (req, res) {
+router.post('/RPN_device_pair/:Device_ID/:MRN/:RPN_ID', function (req, res) {
     if (req.params.RPN_ID && req.params.Device_ID && req.params.MRN) {
         MongoClient.connect(url, { useNewUrlParser: true }, function (err, db) {
 
             db_read = db.db("TestServer");
+            var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);  //UTC+8
 
-            async.parallel([
-                function (finish) {
-                    db_read.collection("Sensor").find({ Device_ID: `${req.params.Device_ID}` }).toArray(function (err1, res1) {
-
-                        finish(err1, res1);
-                    })
-                },
-                function (finish) {
-                    db_read.collection("Patient").find({ MRN: Number(`${req.params.MRN}`) }).toArray(function (err2, res2) {
-                        finish(err2, res2);
-                    })
-                },
-                function (finish) {
-                    db_read.collection("RPN").find({ RPN_ID: Number(`${req.params.RPN_ID}`) }).toArray(function (err3, res3) {
-                        finish(err3, res3);
-                    })
-                }
-            ], function (errs, results) {
-                if (errs) throw errs;
-
-                var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);   //UTC+8
-
-                var obj = {
-                    Device_ID: results[0][0].Device_ID,
-                    BLE_Name: results[0][0].BLE_Name,
-                    BATT: results[0][0].BATT,
-                    Status: 1,
-                    MRN: results[1][0].MRN,
-                    Patient_Name: results[1][0].Patient_Name,
-                    Room_ID: results[1][0].Room_ID,
-                    Bed_ID: results[1][0].Bed_ID,
-                    RPN_ID: results[2][0].RPN_ID,
-                    RPN_Name: results[2][0].RPN_Name
-                }
-                db_write = db.db("TestServer");
-                db_write.collection("sensor_relations").insertOne(obj);
-
-                var response_json = {
-                    "Date": current_time,
-                    "Pair_Status": "OK",
-                    "Device_info": {
-                        "Device_ID": results[0][0].Device_ID,
-                        "BLE_Name": results[0][0].BLE_Name,
-                        "BATT": results[0][0].BATT,
-                        "Status": 1,
-                        "MRN": results[1][0].MRN,
-                        "Patient_Name": results[1][0].Patient_Name,
-                        "Room_ID": results[1][0].Room_ID,
-                        "Bed_ID": results[1][0].Bed_ID
+            db_read.collection("sensor_relations").find({ Device_ID: `${req.params.Device_ID}` }).toArray(function (err1, result) {
+                if (result.length >0) {
+                    var response_json = {
+                        "Date": current_time,
+                        "Pair_Status": "Device has already paired!"
                     }
+                    res.status(200).json(response_json);
                 }
+                else {
+                    async.parallel([
+                        function (finish) {
+                            db_read.collection("Sensor").find({ Device_ID: `${req.params.Device_ID}` }).toArray(function (err1, res1) {
 
-                res.status(200).json(response_json);
+                                finish(err1, res1);
+                            })
+                        },
+                        function (finish) {
+                            db_read.collection("Patient").find({ MRN: Number(`${req.params.MRN}`) }).toArray(function (err2, res2) {
+
+                                finish(err2, res2);
+                            })
+                        },
+                        function (finish) {
+                            db_read.collection("RPN").find({ RPN_ID: Number(`${req.params.RPN_ID}`) }).toArray(function (err3, res3) {
+
+                                finish(err3, res3);
+                            })
+                        },
+
+                    ], function (errs, results) {
+
+                        if (results[0] != 0 && results[1] != 0 && results[2] != 0) {
+
+                            db_read.collection("Sensor").findOneAndUpdate({ Device_ID: `${req.params.Device_ID}` }, { $set: { Status: 1 } });
+
+                            var obj = {
+                                Device_ID: results[0][0].Device_ID,
+                                BLE_Name: results[0][0].BLE_Name,
+                                BATT: results[0][0].BATT,
+                                Status: 1,
+                                MRN: results[1][0].MRN,
+                                Patient_Name: results[1][0].Patient_Name,
+                                Room_ID: results[1][0].Room_ID,
+                                Bed_ID: results[1][0].Bed_ID,
+                                RPN_ID: results[2][0].RPN_ID,
+                                RPN_Name: results[2][0].RPN_Name
+                            }
+                            db_write = db.db("TestServer");
+                            db_write.collection("sensor_relations").insertOne(obj);
+
+                            var response_json = {
+                                "Date": current_time,
+                                "Pair_Status": "OK",
+                                "Device_info": {
+                                    "Device_ID": results[0][0].Device_ID,
+                                    "BLE_Name": results[0][0].BLE_Name,
+                                    "BATT": results[0][0].BATT,
+                                    "Status": 1,
+                                    "MRN": results[1][0].MRN,
+                                    "Patient_Name": results[1][0].Patient_Name,
+                                    "Room_ID": results[1][0].Room_ID,
+                                    "Bed_ID": results[1][0].Bed_ID
+                                }
+
+                            }
+
+                            res.status(200).json(response_json);
+                        }
+
+                        else {
+                            var pair_status_matrix = [0, 0, 0];
+                            if (results[0] == 0)
+                                pair_status_matrix[0] = 1;
+                            if (results[1] == 0)
+                                pair_status_matrix[1] = 1;
+                            if (results[2] == 0)
+                                pair_status_matrix[2] = 1;
+
+                            var pair_status = pair_status_matrix[0] * 4 + pair_status_matrix[1] * 2 + pair_status_matrix[2] * 1
+                            var response_json = {
+                                "Date": current_time,
+                                "Pair_Status": `Error Code : ${pair_status}`,
+                            }
+                            res.status(200).json(response_json);
+                        }
+
+
+
+                    })
+                }
             })
+
         })
     }
 })
@@ -306,18 +345,19 @@ router.post('/RPN_device_unpair/:Device_ID', function (req, res) {
                     var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);   //UTC+8
                     var response_json = {
                         "Date": current_time,
-                        "Pair_status": "Unpair Successfully"
+                        "Pair_Status": "Unpair Successfully"
                     }
                     res.status(200).json(response_json);
 
 
                 })
+                db_read.collection("Sensor").findOneAndUpdate({ Device_ID: `${req.params.Device_ID}` }, { $set: { Status: 2 } });
             }
             else {
                 var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);   //UTC+8
                 var response_json = {
                     "Date": current_time,
-                    "Pair_status": "No such Device"
+                    "Pair_Status": "No such Device"
                 }
                 res.status(200).json(response_json);
             }
