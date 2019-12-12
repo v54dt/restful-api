@@ -43,7 +43,7 @@ router.all('/search', function (req, res) {
 });
 
 router.all('/annotations ', function (req, res) {
-    console.log("anno");
+    //console.log("anno");
     setCORSHeaders(res);
     var annotations = [];
     res.json(annotations);
@@ -52,7 +52,7 @@ router.all('/annotations ', function (req, res) {
 
 router.all('/query', function (req, res) {
 
-    console.log(req.body.targets);
+    //console.log(req.body.targets);
 
     /*for (i in req.body.targets) {
         console.log("");
@@ -90,7 +90,7 @@ router.all('/query', function (req, res) {
         //console.log(to);
         db_read.collection("ecg").find({ Timestamp: { $gt: Number(`${from}`), $lt: Number(`${to}`) } }).sort({ Timestamp: 1 }).toArray(function (err, result) {
 
-            console.log(`result length ${result.length}`);
+            //console.log(`result length ${result.length}`);
 
 
             for (var i = 0; i < result.length; i++) {
@@ -298,23 +298,22 @@ router.post('/RPN_device_unpair/:Device_ID', function (req, res) {
 
         db_read = db.db("TestServer");
         db_read.collection("sensor_relations").find({ Device_ID: `${req.params.Device_ID}` }).toArray(function (err, result) {
-            
-            if(result.length != 0){
+
+            if (result.length != 0) {
                 db_read.collection("sensor_relations").deleteOne({ Device_ID: `${req.params.Device_ID}` }, function (err, result) {
-                    //console.log(result.message);
-                    if (result) {
-                        var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);   //UTC+8
-                        var response_json = {
-                            "Date": current_time,
-                            "Pair_status": "Unpaired"
-                        }
-                        res.status(200).json(response_json);
+
+
+                    var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);   //UTC+8
+                    var response_json = {
+                        "Date": current_time,
+                        "Pair_status": "Unpair Successfully"
                     }
-        
+                    res.status(200).json(response_json);
+
+
                 })
             }
-            else
-            {
+            else {
                 var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);   //UTC+8
                 var response_json = {
                     "Date": current_time,
@@ -322,7 +321,7 @@ router.post('/RPN_device_unpair/:Device_ID', function (req, res) {
                 }
                 res.status(200).json(response_json);
             }
-        }) 
+        })
     });
 })
 
@@ -348,8 +347,8 @@ router.post('/RTECG/:Device_ID', function (req, res) {
         var response_json;
         db_read = db.db("TestServer");
         db_read.collection("ecg").find({ Timestamp: { $gt: Number(`${current_time - 10000}`), $lt: Number(`${current_time}`) }, Device_ID: `${req.params.Device_ID}` }).toArray(function (err, result) {
-            console.log(result.length);
-            console.log(current_time);
+            //console.log(result.length);
+            //console.log(current_time);
             for (var i = 0; i < result.length; i++) {
 
                 var data_time = result[i].Timestamp;
