@@ -212,7 +212,10 @@ router.post('/RPN_device_list/:ID', function (req, res) {
                         "BATT": result[i].BATT,
                         "Status": result[i].Status,
                         "MRN": result[i].Patient_MRN,
-                        "Patient_Name": result[i].Patient_Name
+                        "Patient_Name": result[i].Patient_Name,
+                        "Room_ID": result[i].Room_ID,
+                        "Bed_ID": result[i].Bed_ID
+                        
                     })
                 }
                 var response_json = {
@@ -239,7 +242,7 @@ router.post('/RPN_device_pair/:Device_ID/:MRN/:RPN_ID', function (req, res) {
                 if (result.length >0) {
                     var response_json = {
                         "Date": current_time,
-                        "Pair_Status": "Device has already paired!"
+                        "Pair_Status": "Device has already be paired!"
                     }
                     res.status(200).json(response_json);
                 }
@@ -357,7 +360,7 @@ router.post('/RPN_device_unpair/:Device_ID', function (req, res) {
                 var current_time = new Date(Date.now() + 8 * 60 * 60 * 1000);   //UTC+8
                 var response_json = {
                     "Date": current_time,
-                    "Pair_Status": "No such Device"
+                    "Pair_Status": "No such Device!"
                 }
                 res.status(200).json(response_json);
             }
@@ -457,6 +460,7 @@ router.post('/RTECG/:Device_ID', function (req, res) {
             var newDate = new Date(current_time);
             response_json = {
                 "date": newDate,
+                "Data_Point_Amount": result.length,
                 "L1": L1_datapoints,
                 "L2": L2_datapoints,
                 "L3": L3_datapoints,
